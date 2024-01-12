@@ -22,7 +22,7 @@ def getTokens()-> (str,str):
 def getDates() -> (str,str):
     current_datetime = datetime.datetime.today()
 
-    from_date = current_datetime + datetime.timedelta(days=-729)
+    from_date = current_datetime + datetime.timedelta(days=-730)
     to_date = current_datetime + datetime.timedelta(weeks=-12)
 
     return from_date.strftime('%Y%m%d'),to_date.strftime('%Y%m%d')

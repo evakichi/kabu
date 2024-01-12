@@ -26,7 +26,7 @@ if __name__ == '__main__':
     headers = {'Authorization': f'Bearer {idToken}'}
     for infoCount,info in enumerate(information):
         code = info['Code']
-        print(code)
+        print(f'{infoCount}:{code}')
         daily_quotes_get = requests.get(f"https://api.jquants.com/v1/prices/daily_quotes?code={code}&from={fromDate}&to={toDate}", headers=headers)
         daily_quotes_json = daily_quotes_get.json()
         worksheet = workbook.create_sheet(title=code)
@@ -62,8 +62,6 @@ if __name__ == '__main__':
             worksheet[f"M{quoteCount}"] = daily_quote['AdjustmentLow']
             worksheet[f"N{quoteCount}"] = daily_quote['AdjustmentClose']
             worksheet[f"O{quoteCount}"] = daily_quote['AdjustmentVolume']
-        if infoCount > 20:
-            break
 
     workbook.save(xlsxPath)
     workbook.close()
