@@ -24,8 +24,8 @@ if __name__ == '__main__':
     information = CommonPackage.getBrandInfo(idToken)
     headers = {'Authorization': f'Bearer {idToken}'}
     for infoCount,info in enumerate(information):
-        if infoCount >= 20:
-            break
+#        if infoCount >= 20:
+#            break
         code = info['Code']
         print(f'{infoCount}:{code}')
         daily_quotes_get = requests.get(f"https://api.jquants.com/v1/prices/daily_quotes?code={code}&from={fromDate}&to={toDate}", headers=headers)
