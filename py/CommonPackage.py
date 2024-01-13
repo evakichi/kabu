@@ -59,6 +59,13 @@ def isDesc(data0,data1):
         return True
     return False    
 
+def existsWindow(data0,data1):
+    if data0.min() > data1.max()*1.1:
+        return True
+    if data0.max()*1.1 < data1.min():
+        return True
+    return False
+
 def getPastDays(worksheet,current,days):
 
     pastDays = list()
