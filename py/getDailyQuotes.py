@@ -38,54 +38,87 @@ if __name__ == '__main__':
         for count in range(length):
             if count + 8 >= length:
                 continue
+            if  not dataSheets[count + 0].isNone() and \
+                not dataSheets[count + 1].isNone() and \
+                not dataSheets[count + 2].isNone() and \
+                not dataSheets[count + 3].isNone() and \
+                not dataSheets[count + 4].isNone() and \
+                not dataSheets[count + 5].isNone() and \
+                not dataSheets[count + 6].isNone() and \
+                not dataSheets[count + 7].isNone():
+                CommonPackage.pattern3200(dataSheets,count)
+                CommonPackage.pattern4100(dataSheets,count)
+                CommonPackage.pattern4200(dataSheets,count)
+                CommonPackage.pattern4300(dataSheets,count)
+                CommonPackage.pattern4403(dataSheets,count)
             if count + 7 >= length:
                 continue
-            if  not dataSheets[count    ].isNone() and \
+            if  not dataSheets[count + 0].isNone() and \
                 not dataSheets[count + 1].isNone() and \
                 not dataSheets[count + 2].isNone() and \
                 not dataSheets[count + 3].isNone() and \
                 not dataSheets[count + 4].isNone() and \
                 not dataSheets[count + 5].isNone() and \
                 not dataSheets[count + 6].isNone():
-                CommonPackage.pattern03(dataSheets,count)
-                CommonPackage.pattern09(dataSheets,count)
-                CommonPackage.pattern10(dataSheets,count)
-                CommonPackage.pattern11(dataSheets,count)
-                CommonPackage.pattern17(dataSheets,count)
-                CommonPackage.pattern18(dataSheets,count)
-                CommonPackage.pattern19(dataSheets,count)
-                CommonPackage.pattern20(dataSheets,count)
+                CommonPackage.pattern0300(dataSheets,count)
+                CommonPackage.pattern0900(dataSheets,count)
+                CommonPackage.pattern1000(dataSheets,count)
+                CommonPackage.pattern1100(dataSheets,count)
+                CommonPackage.pattern1700(dataSheets,count)
+                CommonPackage.pattern1800(dataSheets,count)
+                CommonPackage.pattern1900(dataSheets,count)
+                CommonPackage.pattern2000(dataSheets,count)
+                CommonPackage.pattern2000(dataSheets,count)
+                CommonPackage.pattern2700(dataSheets,count)
+                CommonPackage.pattern2800(dataSheets,count)
+                CommonPackage.pattern3000(dataSheets,count)
+                CommonPackage.pattern3302(dataSheets,count)
+                CommonPackage.pattern4402(dataSheets,count)
             if count + 6 >= length:
                 continue
-            if  not dataSheets[count    ].isNone() and \
+            if  not dataSheets[count + 0].isNone() and \
                 not dataSheets[count + 1].isNone() and \
                 not dataSheets[count + 2].isNone() and \
                 not dataSheets[count + 3].isNone() and \
                 not dataSheets[count + 4].isNone() and \
                 not dataSheets[count + 5].isNone():
-                CommonPackage.pattern04(dataSheets,count)
-                CommonPackage.pattern05(dataSheets,count)
-                CommonPackage.pattern06(dataSheets,count)
-                CommonPackage.pattern07(dataSheets,count)
-                CommonPackage.pattern08(dataSheets,count)
-                CommonPackage.pattern12(dataSheets,count)
-                CommonPackage.pattern13(dataSheets,count)
-                CommonPackage.pattern14(dataSheets,count)
-                CommonPackage.pattern15(dataSheets,count)
-                CommonPackage.pattern16(dataSheets,count)
-                CommonPackage.pattern21(dataSheets,count)
-                CommonPackage.pattern22(dataSheets,count)
-                CommonPackage.pattern23(dataSheets,count)
+                CommonPackage.pattern0400(dataSheets,count)
+                CommonPackage.pattern0500(dataSheets,count)
+                CommonPackage.pattern0600(dataSheets,count)
+                CommonPackage.pattern0700(dataSheets,count)
+                CommonPackage.pattern0800(dataSheets,count)
+                CommonPackage.pattern1200(dataSheets,count)
+                CommonPackage.pattern1300(dataSheets,count)
+                CommonPackage.pattern1400(dataSheets,count)
+                CommonPackage.pattern1500(dataSheets,count)
+                CommonPackage.pattern1600(dataSheets,count)
+                CommonPackage.pattern2100(dataSheets,count)
+                CommonPackage.pattern2200(dataSheets,count)
+                CommonPackage.pattern2300(dataSheets,count)
+                CommonPackage.pattern2400(dataSheets,count)
+                CommonPackage.pattern2500(dataSheets,count)
+                CommonPackage.pattern2600(dataSheets,count)
+                CommonPackage.pattern3000(dataSheets,count)
+                CommonPackage.pattern3301(dataSheets,count)
+                CommonPackage.pattern3400(dataSheets,count)
+                CommonPackage.pattern3500(dataSheets,count)
+                CommonPackage.pattern3600(dataSheets,count)
+                CommonPackage.pattern3700(dataSheets,count)
+                CommonPackage.pattern3800(dataSheets,count)
+                CommonPackage.pattern3900(dataSheets,count)
+                CommonPackage.pattern4401(dataSheets,count)
             if count + 5 >= length:
                 continue
-            if  not dataSheets[count    ].isNone() and \
+            if  not dataSheets[count + 0].isNone() and \
                 not dataSheets[count + 1].isNone() and \
                 not dataSheets[count + 2].isNone() and \
                 not dataSheets[count + 3].isNone() and \
                 not dataSheets[count + 4].isNone():
-                CommonPackage.pattern00(dataSheets,count)
-                CommonPackage.pattern01(dataSheets,count)
-                CommonPackage.pattern02(dataSheets,count)
+                CommonPackage.pattern0000(dataSheets,count)
+                CommonPackage.pattern0100(dataSheets,count)
+                CommonPackage.pattern0200(dataSheets,count)
+                CommonPackage.pattern3100(dataSheets,count)
+                CommonPackage.pattern4400(dataSheets,count)
             fill = openpyxl.styles.PatternFill(patternType='solid',fgColor='FFFFFF',bgColor='FFFFFF')                        
 
         worksheet = workbook.create_sheet(title=code)

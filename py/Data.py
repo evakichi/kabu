@@ -217,7 +217,7 @@ class Data:
 
     def isSmallPositive(self):
         if self.isPositive():
-            if self.getAbsRatio() < 0.1:
+            if self.getAbsRatio() < 0.03:
                 return True
         return False
 
@@ -229,7 +229,7 @@ class Data:
 
     def isSmallNegative(self):
         if self.isNegative():
-            if self.getAbsRatio() < 0.1:
+            if self.getAbsRatio() < 0.03:
                 return True
         return False
 
@@ -238,7 +238,13 @@ class Data:
             if self.getAbsRatio() >= 0.1:
                 return True
         return False
-    
+
+    def isBig(self):
+        return self.isBigNegative() or self.isBigPositive()
+
+    def isSmall(self):
+        return self.isBigNegative() or self.isBigPositive()
+
     def getCandleState(self):
         if self.isBigNegative():
             return "大陰線"
