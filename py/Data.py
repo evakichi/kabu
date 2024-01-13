@@ -125,34 +125,48 @@ class Data:
 
 
     def write(self,worksheet,count):
-        worksheet[f'A{count}']=self.date
-        worksheet[f'B{count}']=self.open
-        worksheet[f'C{count}']=self.high
-        worksheet[f'D{count}']=self.low
-        worksheet[f'E{count}']=self.close
-        worksheet[f'F{count}']=self.upperLimit
-        worksheet[f'G{count}']=self.lowerLimit
-        worksheet[f'H{count}']=self.volume
-        worksheet[f'I{count}']=self.turnoverValue
-        worksheet[f'J{count}']=self.adjustmentFactor
-        worksheet[f'K{count}']=self.adjustmentOpen
-        worksheet[f'L{count}']=self.adjustmentHigh
-        worksheet[f'M{count}']=self.adjustmentLow
-        worksheet[f'N{count}']=self.adjustmentClose
-        worksheet[f'O{count}']=self.adjustmentVolume
-        worksheet[f'P{count}']=self.getCandleState()
-        worksheet[f'Q{count}']=self.getRatio()
-        worksheet[f'R{count}']=self.get5DaysStatus().getAnzlyzedDataString()
-        worksheet[f'S{count}']=self.get6DaysStatus().getAnzlyzedDataString()
-        worksheet[f'T{count}']=self.get7DaysStatus().getAnzlyzedDataString()
-        worksheet[f'U{count}']=self.get8DaysStatus().getAnzlyzedDataString()
-        worksheet[f'V{count}']=""
-        worksheet[f'W{count}']=""
-        worksheet[f'X{count}']=""
-        worksheet[f'Y{count}']=""
-        worksheet[f'Z{count}']=""
-        worksheet[f'AA{count}']=""
-        worksheet[f'AB{count}']=""
+        worksheet[f'A{count}']  = self.date
+        worksheet[f'B{count}']  = self.open
+        worksheet[f'C{count}']  = self.high
+        worksheet[f'D{count}']  = self.low
+        worksheet[f'E{count}']  = self.close
+        worksheet[f'F{count}']  = self.upperLimit
+        worksheet[f'G{count}']  = self.lowerLimit
+        worksheet[f'H{count}']  = self.volume
+        worksheet[f'I{count}']  = self.turnoverValue
+        worksheet[f'J{count}']  = self.adjustmentFactor
+        worksheet[f'K{count}']  = self.adjustmentOpen
+        worksheet[f'L{count}']  = self.adjustmentHigh
+        worksheet[f'M{count}']  = self.adjustmentLow
+        worksheet[f'N{count}']  = self.adjustmentClose
+        worksheet[f'O{count}']  = self.adjustmentVolume
+        worksheet[f'P{count}']  = self.getCandleState()
+        worksheet[f'Q{count}']  = self.getRatio()
+        worksheet[f'R{count}']  = self.min()
+        worksheet[f'S{count}']  = self.max()
+        worksheet[f'AA{count}']  = self.get5DaysStatus().getAnzlyzedDataString()
+        worksheet[f'AB{count}']  = self.get6DaysStatus().getAnzlyzedDataString()
+        worksheet[f'AC{count}']  = self.get7DaysStatus().getAnzlyzedDataString()
+        worksheet[f'AD{count}']  = self.get8DaysStatus().getAnzlyzedDataString()
+        worksheet[f'AE{count}']  = ""
+        worksheet[f'AF{count}']  = ""
+        worksheet[f'AG{count}']  = ""
+        worksheet[f'AH{count}'] = ""
+        worksheet[f'AI{count}'] = ""
+        worksheet[f'AJ{count}'] = ""
+        worksheet[f'AK{count}'] = ""
+
+    def getOpen(self):
+        return self.open
+
+    def getHigh(self):
+        return self.high
+
+    def getLow(self):
+        return self.low
+
+    def getClose(self):
+        return self.close
 
     def min(self):
         if not self.isNoneValue:
