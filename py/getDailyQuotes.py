@@ -30,6 +30,78 @@ if __name__ == '__main__':
         print(f'{infoCount}:{code}')
         daily_quotes_get = requests.get(f"https://api.jquants.com/v1/prices/daily_quotes?code={code}&from={fromDate}&to={toDate}", headers=headers)
         daily_quotes_json = daily_quotes_get.json()
+        dataSheets = list()
+        for daily_quote in daily_quotes_json['daily_quotes']:
+            dataSheets.append(Data.Data(daily_quote))
+        
+        length = len(dataSheets)
+        for count in range(length):
+            if count + 8 >= length:
+                continue
+            if count + 7 >= length:
+                continue
+            if  not dataSheets[count    ].isNone() and \
+                not dataSheets[count + 1].isNone() and \
+                not dataSheets[count + 2].isNone() and \
+                not dataSheets[count + 3].isNone() and \
+                not dataSheets[count + 4].isNone() and \
+                not dataSheets[count + 5].isNone() and \
+                not dataSheets[count + 6].isNone() and \
+                not dataSheets[count + 7].isNone():
+                if  dataSheets[count    ].isNegative()      and CommonPackage.isDesc(dataSheets[count    ],dataSheets[count + 1]) and \
+                    dataSheets[count + 1].isNegative()      and CommonPackage.isDesc(dataSheets[count + 1],dataSheets[count + 2]) and \
+                    dataSheets[count + 2].isNegative()      and CommonPackage.isDesc(dataSheets[count + 2],dataSheets[count + 3]) and \
+                    dataSheets[count + 4].isSmallPositive() and CommonPackage.isAsce(dataSheets[count + 3],dataSheets[count + 4]) and \
+                    dataSheets[count + 5].isPositive()      and CommonPackage.isAsce(dataSheets[count + 1],dataSheets[count + 2]) and \
+                    dataSheets[count + 6].isPositive()      and CommonPackage.isAsce(dataSheets[count + 2],dataSheets[count + 3]) and \
+                    dataSheets[count + 7].isPositive():
+                    dataSheets[count + 7].set7DaysStatus(3)
+                    print(dataSheets[count + 7].get7DaysStatus().getAnzlyzedDataString())
+            if count + 6 >= length:
+                continue
+            if  not dataSheets[count    ].isNone() and \
+                not dataSheets[count + 1].isNone() and \
+                not dataSheets[count + 2].isNone() and \
+                not dataSheets[count + 3].isNone() and \
+                not dataSheets[count + 4].isNone() and \
+                not dataSheets[count + 5].isNone() and \
+                not dataSheets[count + 6].isNone():
+                if  dataSheets[count    ].isNegative()      and CommonPackage.isDesc(dataSheets[count    ],dataSheets[count + 1]) and \
+                    dataSheets[count + 1].isNegative()      and CommonPackage.isDesc(dataSheets[count + 1],dataSheets[count + 2]) and \
+                    dataSheets[count + 2].isNegative()      and CommonPackage.isDesc(dataSheets[count + 2],dataSheets[count + 3]) and \
+                    dataSheets[count + 4].isCross()         and CommonPackage.isAsce(dataSheets[count + 3],dataSheets[count + 4]) and \
+                    CommonPackage.isAsce(dataSheets[count + 1],dataSheets[count + 2]) and \
+                    CommonPackage.isAsce(dataSheets[count + 2],dataSheets[count + 3]):
+                    dataSheets[count + 7].set6DaysStatus(4)
+                    print(dataSheets[count + 7].get6DaysStatus().getAnzlyzedDataString())
+            if count + 5 >= length:
+                continue
+            if  not dataSheets[count    ].isNone() and \
+                not dataSheets[count + 1].isNone() and \
+                not dataSheets[count + 2].isNone() and \
+                not dataSheets[count + 3].isNone() and \
+                not dataSheets[count + 4].isNone():
+                if  dataSheets[count    ].isNegative() and CommonPackage.isDesc(dataSheets[count    ],dataSheets[count + 1]) and \
+                    dataSheets[count + 1].isNegative() and CommonPackage.isDesc(dataSheets[count + 1],dataSheets[count + 2]) and \
+                    dataSheets[count + 2].isNegative() and CommonPackage.isDesc(dataSheets[count + 2],dataSheets[count + 3]) and \
+                    dataSheets[count + 3].isNegative() and CommonPackage.isDesc(dataSheets[count + 3],dataSheets[count + 4]):
+                    dataSheets[count + 4].set5DaysStatus(0)
+                    print(dataSheets[count + 4].get5DaysStatus().getAnzlyzedDataString())
+                if  dataSheets[count    ].isNegative()    and CommonPackage.isDesc(dataSheets[count    ],dataSheets[count + 1]) and \
+                    dataSheets[count + 1].isBigNegative() and CommonPackage.isDesc(dataSheets[count + 1],dataSheets[count + 2]) and \
+                    dataSheets[count + 2].isBigNegative() and CommonPackage.isDesc(dataSheets[count + 2],dataSheets[count + 3]) and \
+                    dataSheets[count + 3].isBigNegative() and CommonPackage.isDesc(dataSheets[count + 3],dataSheets[count + 4]):
+                    dataSheets[count + 4].set5DaysStatus(1)
+                    print(dataSheets[count + 4].get5DaysStatus().getAnzlyzedDataString())
+                if  dataSheets[count    ].isNegative()      and CommonPackage.isDesc(dataSheets[count    ],dataSheets[count + 1]) and \
+                    dataSheets[count + 1].isNegative()      and CommonPackage.isDesc(dataSheets[count + 1],dataSheets[count + 2]) and \
+                    dataSheets[count + 2].isNegative()      and CommonPackage.isDesc(dataSheets[count + 2],dataSheets[count + 3]) and \
+                    dataSheets[count + 3].isSmallPositive() and CommonPackage.isAsce(dataSheets[count + 3],dataSheets[count + 4]) and \
+                    dataSheets[count + 4].isBigNegative():
+                    dataSheets[count + 4].set5DaysStatus(2)
+                    print(dataSheets[count + 4].get5DaysStatus().getAnzlyzedDataString())
+            fill = openpyxl.styles.PatternFill(patternType='solid',fgColor='FFFFFF',bgColor='FFFFFF')                        
+
         worksheet = workbook.create_sheet(title=code)
         worksheet['A1']="Date"
         worksheet['B1']="Open"
@@ -52,68 +124,8 @@ if __name__ == '__main__':
         worksheet['S1']="Result6Days"
         worksheet['T1']="Result7Days"
         worksheet['U1']="Result8Days"
-
-        for quoteCount,daily_quote in enumerate(daily_quotes_json['daily_quotes'],start=2):
-            worksheet[f"A{quoteCount}"] = daily_quote['Date']
-            worksheet[f"B{quoteCount}"] = daily_quote['Open']
-            worksheet[f"C{quoteCount}"] = daily_quote['High']
-            worksheet[f"D{quoteCount}"] = daily_quote['Low']
-            worksheet[f"E{quoteCount}"] = daily_quote['Close']
-            worksheet[f"F{quoteCount}"] = daily_quote['UpperLimit']
-            worksheet[f"G{quoteCount}"] = daily_quote['LowerLimit']
-            worksheet[f"H{quoteCount}"] = daily_quote['Volume']
-            worksheet[f"I{quoteCount}"] = daily_quote['TurnoverValue']
-            worksheet[f"J{quoteCount}"] = daily_quote['AdjustmentFactor']
-            worksheet[f"K{quoteCount}"] = daily_quote['AdjustmentOpen']
-            worksheet[f"L{quoteCount}"] = daily_quote['AdjustmentHigh']
-            worksheet[f"M{quoteCount}"] = daily_quote['AdjustmentLow']
-            worksheet[f"N{quoteCount}"] = daily_quote['AdjustmentClose']
-            worksheet[f"O{quoteCount}"] = daily_quote['AdjustmentVolume']
-
-        for count in range()
-            current = Data.Data(daily_quote['Open'],daily_quote['High'],daily_quote['Low'],daily_quote['Close'])
-            if current.isNone:
-                continue
-            fill = openpyxl.styles.PatternFill(patternType='solid',fgColor='FFFFFF',bgColor='FFFFFF')                        
-            dailyResult = ""
-            result4Days = ""
-            result5Days = ""
-            result6Days = ""
-            result7Days = ""
-            result8Days = ""
-            worksheet[f"P{quoteCount}"] = current.getCandleState()
-            worksheet[f"P{quoteCount}"].fill = fill
-            worksheet[f"Q{quoteCount}"] = current.getRatio()
-            worksheet[f"Q{quoteCount}"].fill = fill
-            if quoteCount > 10:
-                pastDays= CommonPackage.getPastDays(worksheet,quoteCount,8)
-                if  not pastDays[-5].isNone() and \
-                    not pastDays[-4].isNone() and \
-                    not pastDays[-3].isNone() and \
-                    not pastDays[-2].isNone() and \
-                    not pastDays[-1].isNone():
-                    if  pastDays[-5].isNegative() and CommonPackage.isDesc(pastDays[-5],pastDays[-4]) and \
-                        pastDays[-4].isNegative() and CommonPackage.isDesc(pastDays[-4],pastDays[-3]) and \
-                        pastDays[-3].isNegative() and CommonPackage.isDesc(pastDays[-3],pastDays[-2]) and \
-                        pastDays[-2].isNegative() and CommonPackage.isAsce(pastDays[-2],pastDays[-1]):
-                        result5Days = "三空叩き込み"
-                        print("三空叩き込み")
-                    if  pastDays[-5].isNegative() and CommonPackage.isDesc(pastDays[-5],pastDays[-4]) and \
-                        pastDays[-4].isBigNegative() and CommonPackage.isDesc(pastDays[-4],pastDays[-3]) and \
-                        pastDays[-3].isBigNegative() and CommonPackage.isDesc(pastDays[-3],pastDays[-2]) and \
-                        pastDays[-2].isBigNegative() and CommonPackage.isDesc(pastDays[-2],pastDays[-1]):
-                        result5Days = "三手大陰線"
-                        print("三手大陰線")
-                    if  pastDays[-5].isNegative() and CommonPackage.isDesc(pastDays[-5],pastDays[-4]) and \
-                        pastDays[-4].isBigNegative() and CommonPackage.isDesc(pastDays[-4],pastDays[-3]) and \
-                        pastDays[-3].isBigNegative() and CommonPackage.isDesc(pastDays[-3],pastDays[-2]) and \
-                        pastDays[-2].isBigNegative() and CommonPackage.isDesc(pastDays[-2],pastDays[-1]):
-                        result5Days = "三手大陰線"
-                        print("三手大陰線")
-            worksheet[f"R{quoteCount}"] = result5Days
-            worksheet[f"S{quoteCount}"] = result6Days
-            worksheet[f"T{quoteCount}"] = result7Days
-            worksheet[f"U{quoteCount}"] = result8Days
+        for count, data in enumerate(dataSheets,start=2):
+            data.write(worksheet,count)
 
     workbook.save(xlsxPath)
     workbook.close()

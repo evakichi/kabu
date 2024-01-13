@@ -50,12 +50,12 @@ def isNone(openVal,highVal,lowVal,closeVal):
    return True
  
 def isAsce(data0,data1):
-    if max(data0) < max(data1):
+    if data0.max() < data1.max():
         return True
     return False    
 
 def isDesc(data0,data1):
-    if min(data0) > min(data1):
+    if data0.min() > data1.min():
         return True
     return False    
 
