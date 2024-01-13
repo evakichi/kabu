@@ -2,6 +2,7 @@ import requests
 import os
 import json
 import datetime
+import Data
 import numpy as np
 
 def getTokens()-> (str,str):
@@ -48,102 +49,23 @@ def isNone(openVal,highVal,lowVal,closeVal):
        return False
    return True
  
-def max(openVal,highVal,lowVal,closeVal):
-    if openVal != None and closeVal != None:
-        if openVal < closeVal:
-            return closeVal
-        else:
-            return openVal
-    else:
-        return None
-
-def min(openVal,highVal,lowVal,closeVal):
-    if openVal != None and closeVal != None:
-        if openVal > closeVal:
-            return closeVal
-        else:
-            return openVal
-    else:
-        return None
-
-def getAvg(openVal,highVal,lowVal,closeVal):
-    return (openVal + highVal + lowVal + closeVal) / 4
-
-def getRatio(openVal,highVal,lowVal,closeVal):
-    return (closeVal - openVal) / getAvg(openVal,highVal,lowVal,closeVal)
-
-def getAbsRatio(openVal,highVal,lowVal,closeVal):
-    return abs(getRatio(openVal,highVal,lowVal,closeVal))
-
-def isPositive(openVal,highVal,lowVal,closeVal):
-    if not isNone(openVal,highVal,lowVal,closeVal) and openVal < closeVal:
+def isAsce(data0,data1):
+    if max(data0) < max(data1):
         return True
-    return False
+    return False    
 
-def isNegative(openVal,highVal,lowVal,closeVal):
-    if not isNone(openVal,highVal,lowVal,closeVal) and openVal > closeVal:
+def isDesc(data0,data1):
+    if min(data0) > min(data1):
         return True
-    return False
-
-def isCross(openVal,highVal,lowVal,closeVal):
-    if not isNone(openVal,highVal,lowVal,closeVal) and openVal == closeVal:
-        return True
-    return False
-
-def isSmallPosoitive(openVal,highVal,lowVal,closeVal):
-    if isPositive(openVal,highVal,lowVal,closeVal):
-        if getAbsRatio(openVal,highVal,lowVal,closeVal) < 0.03:
-            return True
-    return False
-
-def isBigPosoitive(openVal,highVal,lowVal,closeVal):
-    if isPositive(openVal,highVal,lowVal,closeVal):
-        if getAbsRatio(openVal,highVal,lowVal,closeVal) >= 0.03:
-            return True
-    return False
-
-def isSmallNegative(openVal,highVal,lowVal,closeVal):
-    if isNegative(openVal,highVal,lowVal,closeVal):
-        if getAbsRatio(openVal,highVal,lowVal,closeVal) < 0.1:
-            return True
-    return False
-
-def isBigNegative(openVal,highVal,lowVal,closeVal):
-    if isNegative(openVal,highVal,lowVal,closeVal):
-        if getAbsRatio(openVal,highVal,lowVal,closeVal) >= 0.1:
-            return True
-    return False
+    return False    
 
 def getPastDays(worksheet,current,days):
-    pastDaysOpen = list()
-    pastDaysHigh = list()
-    pastDaysLow = list()
-    pastDaysClose = list()
-    pastDaysRatio = list()
-    pastDaysAbsRatio = list()
+
+    pastDays = list()
     
     for d in range(days,-1,-1):
-        if not worksheet[f'B{current - d}'].value == None:
-            pastDaysOpen.append(float(worksheet[f'B{current - d}'].value))
-        else:
-            pastDaysOpen.append(None)
-        if not worksheet[f'C{current - d}'].value == None:
-            pastDaysHigh.append(float(worksheet[f'E{current - d}'].value))
-        else:
-            pastDaysHigh.append(None)
-        if not worksheet[f'D{current - d}'].value == None:
-            pastDaysLow.append(float(worksheet[f'E{current - d}'].value))
-        else:
-            pastDaysLow.append(None)
-        if not worksheet[f'E{current - d}'].value == None:
-            pastDaysClose.append(float(worksheet[f'E{current - d}'].value))
-        else:
-            pastDaysClose.append(None)
-            
-        if pastDaysOpen[-1] != None and pastDaysHigh[-1] != None and pastDaysLow[-1] != None and pastDaysClose[-1] != None:
-            pastDaysRatio.append(float(worksheet[f'Q{current - d}'].value))
-            pastDaysAbsRatio.append(abs(float(worksheet[f'Q{current - d}'].value)))
-        else:
-            pastDaysRatio.append(-1.0)
-            pastDaysAbsRatio.append(-1.0)
-    return pastDaysOpen,pastDaysHigh,pastDaysLow,pastDaysClose,pastDaysRatio,pastDaysAbsRatio
+        pastDays.append(Data.Data(worksheet[f'B{current - d}'].value,
+                                  worksheet[f'C{current - d}'].value,
+                                  worksheet[f'D{current - d}'].value,
+                                  worksheet[f'E{current - d}'].value))
+    return pastDays

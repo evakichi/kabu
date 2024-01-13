@@ -4,6 +4,7 @@ import requests
 import openpyxl
 import math
 from multiprocessing import Process,Queue
+import Data
 
 if __name__ == '__main__':
     numOfThreads = 20 
@@ -47,11 +48,10 @@ if __name__ == '__main__':
         worksheet['O1']="AdjustmentVolume"
         worksheet['P1']="Result"
         worksheet['Q1']="ResultRatio"
-        worksheet['R1']="Result4Days"
-        worksheet['S1']="Result5Days"
-        worksheet['T1']="Result6Days"
-        worksheet['U1']="Result7Days"
-        worksheet['V1']="Result8Days"
+        worksheet['R1']="Result5Days"
+        worksheet['S1']="Result6Days"
+        worksheet['T1']="Result7Days"
+        worksheet['U1']="Result8Days"
 
         for quoteCount,daily_quote in enumerate(daily_quotes_json['daily_quotes'],start=2):
             worksheet[f"A{quoteCount}"] = daily_quote['Date']
@@ -69,74 +69,51 @@ if __name__ == '__main__':
             worksheet[f"M{quoteCount}"] = daily_quote['AdjustmentLow']
             worksheet[f"N{quoteCount}"] = daily_quote['AdjustmentClose']
             worksheet[f"O{quoteCount}"] = daily_quote['AdjustmentVolume']
-            if daily_quote['Open'] != None and daily_quote['High'] != None and daily_quote['Low'] != None and daily_quote['Close'] != None:
-                open  = int(daily_quote['Open'])
-                high  = int(daily_quote['High'])
-                low   = int(daily_quote['Low'])
-                close = int(daily_quote['Close'])
-                fill = openpyxl.styles.PatternFill(patternType='solid',fgColor='FFFFFF',bgColor='FFFFFF')                        
-                dailyResult = ""
-                result4Days = ""
-                result5Days = ""
-                result6Days = ""
-                result7Days = ""
-                result8Days = ""
-                if CommonPackage.isSmallNegative(open,high,low,close):
-                    dailyResult="小陰線"
-                if CommonPackage.isBigNegative(open,high,low,close):
-                    dailyResult="大陰線"
-                if CommonPackage.isSmallPosoitive(open,high,low,close):
-                    dailyResult="小陽線"
-                if CommonPackage.isBigPosoitive(open,high,low,close):
-                    dailyResult="大陽線"
-                if CommonPackage.isCross(open,high,low,close):
-                    dailyResult = "十字線"
-                worksheet[f"P{quoteCount}"] = dailyResult
-                worksheet[f"P{quoteCount}"].fill = fill
-                worksheet[f"Q{quoteCount}"] = CommonPackage.getRatio(open,high,low,close)
-                worksheet[f"Q{quoteCount}"].fill = fill
-                if quoteCount > 10:
-                    pastDaysOpen,pastDaysHigh,pastDaysLow,pastDaysClose,pastDaysRatio,pastDaysAbsRatio = CommonPackage.getPastDays(worksheet,quoteCount,8)
-                    if  CommonPackage.isNegative(pastDaysOpen[-5],pastDaysHigh[-5],pastDaysLow[-5],pastDaysClose[-5]) and \
-                        CommonPackage.isNegative(pastDaysOpen[-4],pastDaysHigh[-4],pastDaysLow[-4],pastDaysClose[-4]) and \
-                        CommonPackage.isNegative(pastDaysOpen[-3],pastDaysHigh[-3],pastDaysLow[-3],pastDaysClose[-3]) and \
-                        CommonPackage.isNegative(pastDaysOpen[-2],pastDaysHigh[-2],pastDaysLow[-2],pastDaysClose[-2]) and \
-                        not CommonPackage.isNone(pastDaysOpen[-2],pastDaysHigh[-2],pastDaysLow[-2],pastDaysClose[-2]) and \
-                        not CommonPackage.isNone(pastDaysOpen[-1],pastDaysHigh[-1],pastDaysLow[-1],pastDaysClose[-1]) and \
-                        CommonPackage.max(pastDaysOpen[-2],pastDaysHigh[-2],pastDaysLow[-2],pastDaysClose[-2]) < CommonPackage.min(pastDaysOpen[-1],pastDaysHigh[-1],pastDaysLow[-1],pastDaysClose[-1]):
-                        if  CommonPackage.isBigNegative(pastDaysOpen[-3],pastDaysHigh[-3],pastDaysLow[-3],pastDaysClose[-3]) and \
-                            CommonPackage.isBigNegative(pastDaysOpen[-2],pastDaysHigh[-2],pastDaysLow[-2],pastDaysClose[-2]) and \
-                            CommonPackage.isBigNegative(pastDaysOpen[-1],pastDaysHigh[-1],pastDaysLow[-1],pastDaysClose[-1]):
-                           result4Days = "三手大陰線"
-                        else:
-                           result4Days = "三空叩き込み"
-                    if  CommonPackage.isNegative(pastDaysOpen[-5],pastDaysHigh[-5],pastDaysLow[-5],pastDaysClose[-5]) and \
-                        CommonPackage.isNegative(pastDaysOpen[-4],pastDaysHigh[-4],pastDaysLow[-4],pastDaysClose[-4]) and \
-                        CommonPackage.isNegative(pastDaysOpen[-3],pastDaysHigh[-3],pastDaysLow[-3],pastDaysClose[-3]) and \
-                        CommonPackage.isPositive(pastDaysOpen[-2],pastDaysHigh[-2],pastDaysLow[-2],pastDaysClose[-2]) and \
-                        CommonPackage.isBigNegative(pastDaysOpen[-1],pastDaysHigh[-1],pastDaysLow[-1],pastDaysClose[-1]):
-                            result5Days = "最後の抱き陰線"
-                    if  CommonPackage.isNegative(pastDaysOpen[-7],pastDaysHigh[-7],pastDaysLow[-7],pastDaysClose[-5]) and \
-                        CommonPackage.isNegative(pastDaysOpen[-6],pastDaysHigh[-6],pastDaysLow[-6],pastDaysClose[-6]) and \
-                        CommonPackage.isNegative(pastDaysOpen[-5],pastDaysHigh[-5],pastDaysLow[-5],pastDaysClose[-5]) and \
-                        CommonPackage.isPositive(pastDaysOpen[-4],pastDaysHigh[-4],pastDaysLow[-4],pastDaysClose[-4]) and \
-                        not CommonPackage.isNone(pastDaysOpen[-4],pastDaysHigh[-4],pastDaysLow[-4],pastDaysClose[-4]) and \
-                        not CommonPackage.isNone(pastDaysOpen[-3],pastDaysHigh[-3],pastDaysLow[-3],pastDaysClose[-3]) and \
-                        not CommonPackage.isNone(pastDaysOpen[-2],pastDaysHigh[-2],pastDaysLow[-2],pastDaysClose[-2]) and \
-                        not CommonPackage.isNone(pastDaysOpen[-1],pastDaysHigh[-1],pastDaysLow[-1],pastDaysClose[-1]) and \
-                        CommonPackage.max(pastDaysOpen[-4],pastDaysHigh[-4],pastDaysLow[-4],pastDaysClose[-4]) < CommonPackage.min(pastDaysOpen[-3],pastDaysHigh[-3],pastDaysLow[-3],pastDaysClose[-3]) and \
-                        CommonPackage.max(pastDaysOpen[-3],pastDaysHigh[-3],pastDaysLow[-3],pastDaysClose[-3]) < CommonPackage.min(pastDaysOpen[-2],pastDaysHigh[-2],pastDaysLow[-2],pastDaysClose[-2]) and \
-                        CommonPackage.max(pastDaysOpen[-2],pastDaysHigh[-2],pastDaysLow[-2],pastDaysClose[-2]) < CommonPackage.min(pastDaysOpen[-1],pastDaysHigh[-1],pastDaysLow[-1],pastDaysClose[-1]) and \
-                        CommonPackage.isNegative(pastDaysOpen[-3],pastDaysHigh[-3],pastDaysLow[-3],pastDaysClose[-3]) and \
-                        CommonPackage.isNegative(pastDaysOpen[-2],pastDaysHigh[-2],pastDaysLow[-2],pastDaysClose[-2]) and \
-                        CommonPackage.isNegative(pastDaysOpen[-1],pastDaysHigh[-1],pastDaysLow[-1],pastDaysClose[-1]):
-                            result7Days = "明けの明星"
-                            print("get")
-            worksheet[f"R{quoteCount}"] = result4Days
-            worksheet[f"S{quoteCount}"] = result5Days
-            worksheet[f"T{quoteCount}"] = result6Days
-            worksheet[f"U{quoteCount}"] = result7Days
-            worksheet[f"V{quoteCount}"] = result8Days
+
+        for count in range()
+            current = Data.Data(daily_quote['Open'],daily_quote['High'],daily_quote['Low'],daily_quote['Close'])
+            if current.isNone:
+                continue
+            fill = openpyxl.styles.PatternFill(patternType='solid',fgColor='FFFFFF',bgColor='FFFFFF')                        
+            dailyResult = ""
+            result4Days = ""
+            result5Days = ""
+            result6Days = ""
+            result7Days = ""
+            result8Days = ""
+            worksheet[f"P{quoteCount}"] = current.getCandleState()
+            worksheet[f"P{quoteCount}"].fill = fill
+            worksheet[f"Q{quoteCount}"] = current.getRatio()
+            worksheet[f"Q{quoteCount}"].fill = fill
+            if quoteCount > 10:
+                pastDays= CommonPackage.getPastDays(worksheet,quoteCount,8)
+                if  not pastDays[-5].isNone() and \
+                    not pastDays[-4].isNone() and \
+                    not pastDays[-3].isNone() and \
+                    not pastDays[-2].isNone() and \
+                    not pastDays[-1].isNone():
+                    if  pastDays[-5].isNegative() and CommonPackage.isDesc(pastDays[-5],pastDays[-4]) and \
+                        pastDays[-4].isNegative() and CommonPackage.isDesc(pastDays[-4],pastDays[-3]) and \
+                        pastDays[-3].isNegative() and CommonPackage.isDesc(pastDays[-3],pastDays[-2]) and \
+                        pastDays[-2].isNegative() and CommonPackage.isAsce(pastDays[-2],pastDays[-1]):
+                        result5Days = "三空叩き込み"
+                        print("三空叩き込み")
+                    if  pastDays[-5].isNegative() and CommonPackage.isDesc(pastDays[-5],pastDays[-4]) and \
+                        pastDays[-4].isBigNegative() and CommonPackage.isDesc(pastDays[-4],pastDays[-3]) and \
+                        pastDays[-3].isBigNegative() and CommonPackage.isDesc(pastDays[-3],pastDays[-2]) and \
+                        pastDays[-2].isBigNegative() and CommonPackage.isDesc(pastDays[-2],pastDays[-1]):
+                        result5Days = "三手大陰線"
+                        print("三手大陰線")
+                    if  pastDays[-5].isNegative() and CommonPackage.isDesc(pastDays[-5],pastDays[-4]) and \
+                        pastDays[-4].isBigNegative() and CommonPackage.isDesc(pastDays[-4],pastDays[-3]) and \
+                        pastDays[-3].isBigNegative() and CommonPackage.isDesc(pastDays[-3],pastDays[-2]) and \
+                        pastDays[-2].isBigNegative() and CommonPackage.isDesc(pastDays[-2],pastDays[-1]):
+                        result5Days = "三手大陰線"
+                        print("三手大陰線")
+            worksheet[f"R{quoteCount}"] = result5Days
+            worksheet[f"S{quoteCount}"] = result6Days
+            worksheet[f"T{quoteCount}"] = result7Days
+            worksheet[f"U{quoteCount}"] = result8Days
 
     workbook.save(xlsxPath)
     workbook.close()
