@@ -88,40 +88,40 @@ def getPastDays(worksheet,current,days):
                                   worksheet[f'E{current - d}'].value))
     return pastDays
 
-def pattern0000(data,count,debug=False): #三空叩き込み
+def pattern050000(data,count,debug=False): #三空叩き込み
     if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].hasWindow()           and \
         data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].hasWindow()           and \
         data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].hasWindow()           and \
         data[count + 3].isNegative()      and data[count + 4].isAsce()   and data[count + 4].dontCare()            and \
         data[count + 4].dontCare()        :
 
-        data[count + 4].set5RowsStatus(0)
+        data[count + 4].getAnalysisData().appendStatus(0)
         if debug:
-            print(data[count + 4].get5RowsStatus().getAnzlyzedDataString())
+            print(data[count + 4].getAnalysisData().getAnalyzedDataString())
 
-def pattern0100(data,count,debug=False): #三手大陰線
+def pattern050100(data,count,debug=False): #三手大陰線
     if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()            and \
         data[count + 1].isBigNegative()   and data[count + 2].isDesc()   and data[count + 2].dontCare()            and \
         data[count + 2].isBigNegative()   and data[count + 3].isDesc()   and data[count + 3].dontCare()            and \
         data[count + 3].isBigNegative()   and data[count + 4].isDesc()   and data[count + 4].dontCare()            and \
         data[count + 4].dontCare()        :
 
-        data[count + 4].set5RowsStatus(0)
+        data[count + 4].getAnalysisData().appendStatus(1)
         if debug:
-            print(data[count + 4].get5RowsStatus().getAnzlyzedDataString())
+            print(data[count + 4].getAnalysisData().getAnalyzedDataString())
 
-def pattern0200(data,count,debug=False): #最後の抱き陰線
+def pattern050200(data,count,debug=False): #最後の抱き陰線
     if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()            and \
         data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()            and \
         data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].dontCare()            and \
-        data[count + 3].isPositive()      and data[count + 4].dontCare() and data[count + 4].includePrev()         and \
+        data[count + 3].isPositive()      and data[count + 4].dontCare() and data[count + 4].isIncludePrev()         and \
         data[count + 4].isBigNegative()   :
 
-        data[count + 4].set5RowsStatus(0)
+        data[count + 4].getAnalysisData().appendStatus(2)
         if debug:
-            print(data[count + 4].get5RowsStatus().getAnzlyzedDataString())
+            print(data[count + 4].getAnalysisData().getAnalyzedDataString())
 
-def pattern0300(data,count,debug=False): #明けの明星
+def pattern060300(data,count,debug=False): #明けの明星
     if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()            and \
         data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()            and \
         data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].hasWindow()           and \
@@ -129,11 +129,11 @@ def pattern0300(data,count,debug=False): #明けの明星
         data[count + 4].isPositive()      and data[count + 5].isAsce()   and data[count + 5].dontCare()            and \
         data[count + 5].isPositive()      :
 
-        data[count + 5].set6RowsStatus(0)
+        data[count + 5].getAnalysisData().appendStatus(3)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern0400(data,count,debug=False): #捨て子底
+def pattern060400(data,count,debug=False): #捨て子底
     if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()            and \
         data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()            and \
         data[count + 2].isBigNegative()   and data[count + 3].isDesc()   and data[count + 3].hasWindow()           and \
@@ -141,11 +141,11 @@ def pattern0400(data,count,debug=False): #捨て子底
         data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].dontCare()            and \
         data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(0)
+        data[count + 5].getAnalysisData().appendStatus(4)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern0500(data,count,debug=False): #大陰線のはらみ寄せ
+def pattern060500(data,count,debug=False): #大陰線のはらみ寄せ
     if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
         data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
         data[count + 2].isBigNegative()   and data[count + 3].dontCare() and data[count + 3].isIncludedFromPrev()   and \
@@ -153,11 +153,11 @@ def pattern0500(data,count,debug=False): #大陰線のはらみ寄せ
         data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
         data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(0)
+        data[count + 5].getAnalysisData().appendStatus(5)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern0600(data,count,debug=False): #たくり線
+def pattern060600(data,count,debug=False): #たくり線
     if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
         data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
         data[count + 2].isBigNegative()   and data[count + 3].isDesc()   and data[count + 3].hasWindow()            and \
@@ -165,11 +165,11 @@ def pattern0600(data,count,debug=False): #たくり線
         data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
         data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(0)
+        data[count + 5].getAnalysisData().appendStatus(6)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern0700(data,count,debug=False): #勢力線
+def pattern060700(data,count,debug=False): #勢力線
     if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
         data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
         data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].hasWindow()            and \
@@ -177,544 +177,648 @@ def pattern0700(data,count,debug=False): #勢力線
         data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
         data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(0)
+        data[count + 5].getAnalysisData().appendStatus(7)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern0800(data,count,debug=False): #陰の陰はらみ
+def pattern060800(data,count,debug=False): #陰の陰はらみ
     if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
         data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
-        data[count + 2].isBigNegative()   and data[count + 3].isDesc()   and data[count + 3].includedFromPrev()     and \
+        data[count + 2].isBigNegative()   and data[count + 3].isDesc()   and data[count + 3].isIncludedFromPrev()     and \
         data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].dontCare()             and \
         data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
         data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(0)
+        data[count + 5].getAnalysisData().appendStatus(8)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern0900(data,count,debug=False): #放れ五手黒一本底
-    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
-        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
-        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].dontCare()             and \
-        data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].dontCare()             and \
-        data[count + 4].isNegative()      and data[count + 5].isAsce()   and data[count + 5].hasWindow()            and \
-        data[count + 5].bigNegative()     and data[count + 6].isAsce()   and data[count + 6].dontCare()             and \
+def pattern070900(data,count,debug=False): #放れ五手黒一本底
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].hasWindow()            and \
+        data[count + 1].isSmall()         and data[count + 2].isDesc()   and data[count + 2].isClose()              and \
+        data[count + 2].isSmall()         and data[count + 3].dontCare() and data[count + 3].isClose()              and \
+        data[count + 3].isSmall()         and data[count + 4].dontCare() and data[count + 4].isClose()              and \
+        data[count + 4].isSmall()         and data[count + 5].isAsce()   and data[count + 5].hasWindow()            and \
+        data[count + 5].bigNegative()     and data[count + 6].dontCare() and data[count + 6].dontCare()             and \
         data[count + 6].dontCare()        :
 
-        data[count + 6].set7RowsStatus(0)
+        data[count + 6].getAnalysisData().appendStatus(9)
         if debug:
-            print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
 
-def pattern1000(data,count,debug=False): #やぐら底
+def pattern071000(data,count,debug=False): #やぐら底
     if  data[count + 0].isBigNegative()   and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
-        data[count + 1].dontCare()        and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
-        data[count + 2].dontCare()        and data[count + 3].dontCare() and data[count + 3].dontCare()             and \
-        data[count + 3].dontCare()        and data[count + 4].dontCare() and data[count + 4].dontCare()             and \
-        data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 1].isSmall()         and data[count + 2].dontCare() and data[count + 2].isClose()              and \
+        data[count + 2].isSmall()         and data[count + 3].dontCare() and data[count + 3].isClose()              and \
+        data[count + 3].isSmall()         and data[count + 4].dontCare() and data[count + 4].isClose()              and \
+        data[count + 4].isSmall()         and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
         data[count + 5].isBigPositive()   and data[count + 6].isAsce()   and data[count + 6].dontCare()             and \
         data[count + 6].dontCare()        :
 
-        data[count + 6].set7RowsStatus(0)
+        data[count + 6].getAnalysisData().appendStatus(10)
         if debug:
-            print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
 
-def pattern1100(data,count,debug=False): #小幅上放れ黒線
-    if  data[count + 0].isNegative()   and data[count + 1].dontCare() and data[count + 1].dontCare()             and \
-        data[count + 1].isPositive()   and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
-        data[count + 2].isNegative()   and data[count + 3].dontCare() and data[count + 3].dontCare()             and \
-        data[count + 3].isPositive()   and data[count + 4].dontCare() and data[count + 4].dontCare()             and \
+def pattern071100(data,count,debug=False): #小幅上放れ黒線
+    if  data[count + 0].isNegative()   and data[count + 1].dontCare() and data[count + 1].isClose()              and \
+        data[count + 1].isPositive()   and data[count + 2].dontCare() and data[count + 2].isClose()              and \
+        data[count + 2].isNegative()   and data[count + 3].dontCare() and data[count + 3].isClose()              and \
+        data[count + 3].isPositive()   and data[count + 4].dontCare() and data[count + 4].isClose()              and \
         data[count + 4].isNegative()   and data[count + 5].isAsce()   and data[count + 5].hasWindow()            and \
         data[count + 5].isNegative()   and data[count + 6].isAsce()   and data[count + 6].dontCare()             and \
         data[count + 6].dontCare()        :
 
-        data[count + 6].set7RowsStatus(0)
+        data[count + 6].getAnalysisData().appendStatus(11)
         if debug:
-            print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
 
-def pattern1200(data,count,debug=False): #放れ七手の変化底
-    if  data[count + 0].isNegative()   and data[count + 1].isDesc()   and data[count + 1].hasWindow()             and \
-        data[count + 1].isSmall()      and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
-        data[count + 2].isSmall()      and data[count + 3].dontCare() and data[count + 3].dontCare()             and \
-        data[count + 3].isSmall()      and data[count + 4].dontCare() and data[count + 4].dontCare()             and \
+def pattern061200(data,count,debug=False): #放れ七手の変化底
+    if  data[count + 0].isNegative()   and data[count + 1].isDesc()   and data[count + 1].hasWindow()            and \
+        data[count + 1].isSmall()      and data[count + 2].dontCare() and data[count + 2].isClose()              and \
+        data[count + 2].isSmall()      and data[count + 3].dontCare() and data[count + 3].isClose()              and \
+        data[count + 3].isSmall()      and data[count + 4].dontCare() and data[count + 4].isClose()              and \
         data[count + 4].isSmall()      and data[count + 5].isAsce()   and data[count + 5].hasWindow()            and \
         data[count + 5].isPositive()   :
 
-        data[count + 5].set6RowsStatus(0)
+        data[count + 5].getAnalysisData().appendStatus(12)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern1300(data,count,debug=False): #連続下げ放れ三つ星
+def pattern061300(data,count,debug=False): #連続下げ放れ三つ星
     if  data[count + 0].isNegative()   and data[count + 1].isDesc()   and data[count + 1].hasWindow()            and \
-        data[count + 1].isSmall()      and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
-        data[count + 2].isSmall()      and data[count + 3].dontCare() and data[count + 3].dontCare()             and \
-        data[count + 3].isSmall()      and data[count + 4].dontCare() and data[count + 4].dontCare()             and \
+        data[count + 1].isSmall()      and data[count + 2].dontCare() and data[count + 2].isClose()              and \
+        data[count + 2].isSmall()      and data[count + 3].dontCare() and data[count + 3].isClose()              and \
+        data[count + 3].isSmall()      and data[count + 4].dontCare() and data[count + 4].isClose()              and \
         data[count + 4].isCross()      and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
         data[count + 5].isPositive()   :
 
-        data[count + 5].set6RowsStatus(0)
+        data[count + 5].getAnalysisData().appendStatus(13)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern1400(data,count,debug=False): #逆襲線
-    if  data[count + 0].isNegative()    and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
-        data[count + 1].isNegative()    and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
+def pattern061400(data,count,debug=False): #逆襲線
+    if  data[count + 0].isNegative()    and data[count + 1].isDesc()   and data[count + 1].isClose()              and \
+        data[count + 1].isNegative()    and data[count + 2].isDesc()   and data[count + 2].isClose()              and \
         data[count + 2].isNegative()    and data[count + 3].isDesc()   and data[count + 3].hasWindow()            and \
-        data[count + 3].isBigPositive() and data[count + 4].isAsce()   and data[count + 4].dontCare()             and \
-        data[count + 4].dontCare()      and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 3].isBigPositive() and data[count + 4].isAsce()   and data[count + 4].isClose()              and \
+        data[count + 4].dontCare()      and data[count + 5].isAsce()   and data[count + 5].isClose()              and \
         data[count + 5].dontCare()      :
 
-        data[count + 5].set6RowsStatus(0)
+        data[count + 5].getAnalysisData().appendStatus(14)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
-
-def pattern1500(data,count,debug=False): #抱き陽線
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
+6
+def pattern061500(data,count,debug=False): #抱き陽線
     if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
         data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
         data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].dontCare()             and \
-        data[count + 3].isSmallNegative() and data[count + 4].dontCare() and data[count + 4].includePrev()          and \
+        data[count + 3].isSmallNegative() and data[count + 4].dontCare() and data[count + 4].isIncludePrev()          and \
         data[count + 4].isBigPositive()   and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
         data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(0)
+        data[count + 5].getAnalysisData().appendStatus(15)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern1600(data,count,debug=False): #寄り切り陽線
-    if  data[count + 0].dontCare()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
-        data[count + 1].dontCare()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
-        data[count + 2].dontCare()      and data[count + 3].isDesc()   and data[count + 3].dontCare()             and \
-        data[count + 3].dontCare()      and data[count + 4].dontCare() and (data[count + 4].getCandleState() == 2 or data[count + 4].getCandleState() == 4)            and \
+def pattern061600(data,count,debug=False): #寄り切り陽線
+    if  data[count + 0].isSmall()       and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
+        data[count + 1].isSmall()       and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
+        data[count + 2].isSmall()       and data[count + 3].isDesc()   and data[count + 3].dontCare()             and \
+        data[count + 3].isSmall()       and data[count + 4].dontCare() and (data[count + 4].getCandleState() == 2 or data[count + 4].getCandleState() == 4)            and \
         data[count + 4].isPositive()    and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
         data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(0)
+        data[count + 5].getAnalysisData().appendStatus(16)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern1700(data,count,debug=False): #赤三兵
-    if  data[count + 0].isSmallNegative() and \
-        data[count + 1].isSmallNegative() and \
-        data[count + 2].isSmallNegative() and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isSmallPositive() and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 4].isSmallPositive() and isAsce(data[count + 4],data[count + 5]) and \
-        data[count + 5].isSmallPositive() and isAsce(data[count + 5],data[count + 6]):
+def pattern071700(data,count,debug=False): #赤三兵
+    if  data[count + 0].isSmallNegative() and data[count + 1].dontCare() and data[count + 1].dontCare()             and \
+        data[count + 1].isSmallNegative() and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
+        data[count + 2].isSmallNegative() and data[count + 3].dontCare() and data[count + 3].dontCare()             and \
+        data[count + 3].isSmallPositive() and data[count + 4].isAsce()   and data[count + 4].dontCare()             and \
+        data[count + 4].isSmallPositive() and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 5].isSmallPositive() and data[count + 6].isAsce()   and data[count + 6].hasWindow()            and \
+        data[count + 6].dontCare()        :
 
-        data[count + 6].set7RowsStatus(17)
+        data[count + 6].getAnalysisData().appendStatus(17)
         if debug:
-            print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
 
-def pattern1800(data,count,debug=False): #下位の陽線五本
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 4].isPositive()      and isAsce(data[count + 4],data[count + 5]) and \
-        data[count + 5].isPositive()      and isAsce(data[count + 5],data[count + 6]):
+def pattern071800(data,count,debug=False): #下位の陽線五本
+    if  data[count + 0].isNegative()      and data[count + 1].dontCare() and data[count + 1].dontCare()             and \
+        data[count + 1].isPositive()      and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
+        data[count + 2].isPositive()      and data[count + 3].dontCare() and data[count + 3].dontCare()             and \
+        data[count + 3].isPositive()      and data[count + 4].dontCare() and data[count + 4].dontCare()             and \
+        data[count + 4].isPositive()      and data[count + 5].dontCare() and data[count + 5].dontCare()             and \
+        data[count + 5].isPositive()      and data[count + 6].dontCare() and data[count + 6].dontCare()             and \
+        data[count + 6].dontCare()        :
 
-        data[count + 6].set7RowsStatus(18)
+        data[count + 6].getAnalysisData().appendStatus(18)
         if debug:
-            print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
 
-def pattern1900(data,count,debug=False): #押え込み線
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isNegative()      and isDesc(data[count + 3],data[count + 4]) and \
-        data[count + 4].isNegative()      and isAsce(data[count + 4],data[count + 5]) and \
-        data[count + 5].isPositive()      and isAsce(data[count + 5],data[count + 6]):
+def pattern071900(data,count,debug=False): #押え込み線
+    if  data[count + 0].isPositive()      and data[count + 1].dontCare() and data[count + 1].dontCare()             and \
+        data[count + 1].isPositive()      and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].dontCare()             and \
+        data[count + 3].isNegative()      and data[count + 4].isDesc()   and data[count + 4].dontCare()             and \
+        data[count + 4].isNegative()      and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 5].isPositive()      and data[count + 6].dontCare() and data[count + 6].dontCare()             and \
+        data[count + 6].dontCare()        :
 
-        data[count + 6].set7RowsStatus(19)
+        data[count + 6].getAnalysisData().appendStatus(19)
         if debug:
-            print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
 
-def pattern2000(data,count,debug=False): #上げの差し込み線
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isNegative()      and isDesc(data[count + 3],data[count + 4]) and \
-        data[count + 4].isPositive()      and isAsce(data[count + 4],data[count + 5]) and \
-        isAsce(data[count + 5],data[count + 6]):
+def pattern072000(data,count,debug=False): #上げの差し込み線
+    if  data[count + 0].isPositive()      and data[count + 1].dontCare() and data[count + 1].dontCare()             and \
+        data[count + 1].isPositive()      and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].dontCare()             and \
+        data[count + 3].isNegative()      and data[count + 4].isDesc()   and data[count + 4].dontCare()             and \
+        data[count + 4].isPositive()      and data[count + 5].dontCare() and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()        and data[count + 6].dontCare() and data[count + 6].dontCare()             and \
+        data[count + 6].dontCare()        :
 
-        data[count + 6].set7RowsStatus(20)
+        data[count + 6].getAnalysisData().appendStatus(20)
         if debug:
-            print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
 
-def pattern2100(data,count,debug=False): #上げ三法
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isBigPositive()   and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isNegative()      and isDesc(data[count + 3],data[count + 4]) and \
-        data[count + 4].isNegative()      and isAsce(data[count + 4],data[count + 5]) and \
-        data[count + 5].isPositive():
+def pattern062100(data,count,debug=False): #上げ三法
+    if  data[count + 0].isPositive()      and data[count + 1].dontCare() and data[count + 1].dontCare()             and \
+        data[count + 1].isBigPositive()   and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].dontCare()             and \
+        data[count + 3].isNegative()      and data[count + 4].isDesc()   and data[count + 4].dontCare()             and \
+        data[count + 4].isNegative()      and data[count + 5].dontCare() and data[count + 5].dontCare()             and \
+        data[count + 5].isBigPositive()   :
 
-        data[count + 5].set6RowsStatus(21)
+        data[count + 5].getAnalysisData().appendStatus(21)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern2200(data,count,debug=False): #カブセの上抜け
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isNegative()      and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 4].isPositive()      and isAsce(data[count + 4],data[count + 5]):
+def pattern062200(data,count,debug=False): #カブセの上抜け
+    if  data[count + 0].isPositive()      and data[count + 1].dontCare() and data[count + 1].dontCare()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].dontCare()             and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].dontCare()             and \
+        data[count + 3].isNegative()      and data[count + 4].dontCare() and data[count + 4].dontCare()             and \
+        data[count + 4].isPositive()      and data[count + 5].dontCare() and data[count + 5].dontCare()             and \
+        data[count + 5].isBigPositive()   :
 
-        data[count + 5].set6RowsStatus(22)
+        data[count + 5].getAnalysisData().appendStatus(22)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern2300(data,count,debug=False): #上伸途上の連続タスキ
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isNegative()      and isAsce(data[count + 3],data[count + 4]) and \
-        isAsce(data[count + 4],data[count + 5]):
-
-        data[count + 5].set6RowsStatus(23)
+def pattern062300(data,count,debug=False): #上伸途上の連続タスキ
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].dontCare()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].dontCare()             and \
+        data[count + 2].isPositive()      and data[count + 3].isDesc()   and data[count + 3].dontCare()             and \
+        data[count + 3].isNegative()      and data[count + 4].dontCare() and data[count + 4].dontCare()             and \
+        data[count + 4].dontCare()        and data[count + 5].dontCare() and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()        :
+    
+        data[count + 5].getAnalysisData().appendStatus(23)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern2400(data,count,debug=False): #上放れタスキ
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        existsWindow(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isNegative()      and isAsce(data[count + 3],data[count + 4]) and \
-        isAsce(data[count + 4],data[count + 5]):
+def pattern062400(data,count,debug=False): #上放れタスキ
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].dontCare()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].hasWindow()            and \
+        data[count + 2].isPositive()      and data[count + 3].isDesc()   and data[count + 3].dontCare()             and \
+        data[count + 3].isNegative()      and data[count + 4].dontCare() and data[count + 4].dontCare()             and \
+        data[count + 4].dontCare()        and data[count + 5].dontCare() and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(24)
+        data[count + 5].getAnalysisData().appendStatus(24)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern2500(data,count,debug=False): #上伸途上のクロス
-    if  data[count + 0].isPositive()      and \
-        data[count + 1].isPositive()      and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isBigPositive()   and \
-        data[count + 4].isCross()         and isAsce(data[count + 4],data[count + 5]):
+def pattern062500(data,count,debug=False): #上伸途上のクロス
+    if  data[count + 0].isPositive()      and data[count + 1].dontCare()   and data[count + 1].dontCare()             and \
+        data[count + 1].isPositive()      and data[count + 2].dontCare()   and data[count + 2].dontCare()            and \
+        data[count + 2].isPositive()      and data[count + 3].isDesc()     and data[count + 3].dontCare()             and \
+        data[count + 3].isBigPositive()   and data[count + 4].dontCare()   and data[count + 4].dontCare()             and \
+        data[count + 4].isCross()         and data[count + 5].dontCare()   and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(25)
+        data[count + 5].getAnalysisData().appendStatus(25)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern2600(data,count,debug=False): #上げの三つ星
-    if  data[count + 0].isPositive()      and \
-        data[count + 1].isPositive()      and \
-        data[count + 2].isSmallNegative() and \
-        data[count + 3].isSmallPositive() and \
-        data[count + 4].isSmallNegative() and isAsce(data[count + 4],data[count + 5]):
+def pattern062600(data,count,debug=False): #上げの三つ星
+    if  data[count + 0].isPositive()      and data[count + 1].dontCare()   and data[count + 1].dontCare()             and \
+        data[count + 1].isPositive()      and data[count + 2].dontCare()   and data[count + 2].dontCare()             and \
+        data[count + 2].isSmall()         and data[count + 3].dontCare()   and data[count + 3].dontCare()             and \
+        data[count + 3].isSmall()         and data[count + 4].dontCare()   and data[count + 4].dontCare()             and \
+        data[count + 4].isSmall()         and data[count + 5].dontCare()   and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(26)
+        data[count + 5].getAnalysisData().appendStatus(26)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern2700(data,count,debug=False): #並び赤
-    if  data[count + 0].isPositive()      and \
-        data[count + 1].isPositive()      and \
-        data[count + 2].isPositive()      and \
-        existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 3].isSmallPositive() and \
-        data[count + 4].isSmallPositive() and isAsce(data[count + 4],data[count + 5]) and \
-        isAsce(data[count + 5],data[count + 6]):
+def pattern072700(data,count,debug=False): #並び赤
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()     and data[count + 1].dontCare()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()     and data[count + 2].dontCare()             and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()     and data[count + 3].hasWindow()            and \
+        data[count + 3].isPositive()      and data[count + 4].isFlat()     and data[count + 4].isClose()              and \
+        data[count + 4].isPositive()      and data[count + 5].dontCare()   and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()        and data[count + 5].dontCare()   and data[count + 5].dontCare()             and \
+        data[count + 6].dontCare()        :
 
-        data[count + 6].set7RowsStatus(27)
+        data[count + 6].getAnalysisData().appendStatus(27)
         if debug:
-            print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
 
-def pattern2800(data,count,debug=False): #上放れ陰線二本連続
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        existsWindow(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 4].isPositive()      and isAsce(data[count + 4],data[count + 5]) and \
-        existsWindow(data[count + 4],data[count + 5]) and \
-        data[count + 5].isNegative()      and isDesc(data[count + 5],data[count + 6]) :
+def pattern072800(data,count,debug=False): #上放れ陰線二本連続
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()     and data[count + 1].hasWindow()            and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()     and data[count + 2].dontCare()             and \
+        data[count + 2].isNegative()      and data[count + 3].isAsce()     and data[count + 3].dontCare()             and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()     and data[count + 4].dontCare()             and \
+        data[count + 4].isPositive()      and data[count + 5].isAsce()     and data[count + 5].hasWindow()            and \
+        data[count + 5].isNegative()      and data[count + 5].isDesc()     and data[count + 5].dontCare()             and \
+        data[count + 6].dontCare()        :
 
-        data[count + 6].set7RowsStatus(28)
+        data[count + 6].getAnalysisData().appendStatus(28)
         if debug:
-            print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
 
-def pattern2900(data,count,debug=False): #上位の連続大陽線
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        existsWindow(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 4].isBigPositive()   and isAsce(data[count + 4],data[count + 5]) and \
-        existsWindow(data[count + 4],data[count + 5]) and \
-        data[count + 5].isBigPositive()   and isAsce(data[count + 5],data[count + 6]) and \
-        data[count + 6].isBigPositive():
+def pattern072900(data,count,debug=False): #上位の連続大陽線
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()     and data[count + 1].isClose()              and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()     and data[count + 2].isClose()              and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()     and data[count + 3].isClose()              and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()     and data[count + 4].isClose()              and \
+        data[count + 4].isBigPositive()   and data[count + 5].isAsce()     and data[count + 5].isClose()              and \
+        data[count + 5].isBigPositive()   and data[count + 5].isAsce()     and data[count + 5].isClose()              and \
+        data[count + 6].isBigPositive()   :
 
-        data[count + 6].set7RowsStatus(29)
+        data[count + 6].getAnalysisData().appendStatus(29)
         if debug:
-            print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
 
-def pattern3000(data,count,debug=False): #波高い線
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 3].getClose()*1.10 < data[count + 4].getHigh() and \
-        data[count + 4].isPositive()      and isAsce(data[count + 4],data[count + 5]):
-        
-        data[count + 5].set6RowsStatus(30)
-        if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+def pattern063000(data,count,debug=False): #波高い線
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()     and data[count + 1].isClose()              and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()     and data[count + 2].isClose()              and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()     and data[count + 3].isClose()              and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()     and data[count + 4].isClose()              and \
+        data[count + 4].isPositive()      and data[count + 5].dontCare()   and data[count + 5].isClose()              and \
+        data[count + 5].dontCare()        and \
+        data[count + 3].getHigh() > data[count + 3].getClose()*1.1 and data[count + 3].getLow() < data[count + 4].getOpen() and data[count + 3].getHigh() > data[count + 4].getClose():
 
-def pattern3100(data,count,debug=False): #三空踏み上げ
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        existsWindow(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        existsWindow(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isDesc(data[count + 3],data[count + 4]):
-        
-        data[count + 4].set5RowsStatus(31)
+        data[count + 5].getAnalysisData().appendStatus(30)
         if debug:
-            print(data[count + 4].get5RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern3200(data,count,debug=False): #新値八手利食い線
-    if  data[count + 0].max() < data[count + 1].max() < data[count + 2].max() < data[count + 3].max() < \
-        data[count + 4].max() < data[count + 4].max() < data[count + 6].max() < data[count + 7].max():
-        
-        data[count + 7].set8RowsStatus(32)
-        if debug:
-            print(data[count + 7].get8RowsStatus().getAnzlyzedDataString())
+def pattern053100(data,count,debug=False): #三空踏み上げ
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].hasWindow()           and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].hasWindow()           and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].hasWindow()           and \
+        data[count + 3].isPositive()      and data[count + 4].isDesc()   and data[count + 4].dontCare()            and \
+        data[count + 4].dontCare()        :
 
-def pattern3300(data,count,debug=False): #三手放れ寄せ線
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        existsWindow(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 4].isCross():
-        
-        data[count + 4].set5RowsStatus(33)
+        data[count + 4].getAnalysisData().appendStatus(31)
         if debug:
-            print(data[count + 5].get5RowsStatus().getAnzlyzedDataString())
+            print(data[count + 4].getAnalysisData().getAnalyzedDataString())
 
-def pattern3301(data,count,debug=False): #三手放れ寄せ線
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        existsWindow(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 4].isPositive()      and isAsce(data[count + 4],data[count + 5]) and \
-        data[count + 5].isCross():
-        
-        data[count + 5].set6RowsStatus(33)
-        if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+def pattern083200(data,count,debug=False): #新値八手利食い線
+    if  data[count + 0].dontCare()        and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].dontCare()        and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].dontCare()        and data[count + 3].isAsce()   and data[count + 3].isClose()             and \
+        data[count + 3].dontCare()        and data[count + 4].isAsce()   and data[count + 4].isClose()             and \
+        data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].isClose()             and \
+        data[count + 5].dontCare()        and data[count + 6].isAsce()   and data[count + 6].isClose()             and \
+        data[count + 6].dontCare()        and data[count + 7].isAsce()   and data[count + 7].isClose()             and \
+        data[count + 7].dontCare()        :
 
-def pattern3302(data,count,debug=False): #三手放れ寄せ線
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        existsWindow(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 4].isPositive()      and isAsce(data[count + 4],data[count + 5]) and \
-        data[count + 5].isPositive()      and isAsce(data[count + 5],data[count + 6]) and \
-        data[count + 6].isCross():
-        
-        data[count + 6].set7RowsStatus(33)
+        data[count + 7].getAnalysisData().appendStatus(32)
         if debug:
-            print(data[count + 5].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 7].getAnalysisData().getAnalyzedDataString())
 
-def pattern3400(data,count,debug=False): #行き詰まり線
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        existsWindow(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        existsWindow(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 3].isBigPositive()   and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 4].isPositive()      and isDesc(data[count + 4],data[count + 5]) and \
-        data[count + 3].getHigh() > data[count].getClose()*1.10:
-        
-        data[count + 5].set6RowsStatus(34)
-        if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+def pattern053300(data,count,debug=False): #三手放れ寄せ線
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].hasWindow()           and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].isClose()             and \
+        data[count + 4].isCross()         :
 
-def pattern3500(data,count,debug=False): #三羽ガラス
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isNegative()      and isDesc(data[count + 3],data[count + 4]) and \
-        data[count + 4].isNegative()      and isDesc(data[count + 4],data[count + 5]) and \
-        data[count + 5].isNegative() and \
-        data[count + 3].getClose() < data[count + 4].getOpen() and \
-        data[count + 4].getClose() < data[count + 5].getOpen():
-        
-        data[count + 5].set6RowsStatus(35)
+        data[count + 4].getAnalysisData().appendStatus(33)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 4].getAnalysisData().getAnalyzedDataString())
 
-def pattern3600(data,count,debug=False): #首吊り線
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 3].getLow() < data[count + 3].getOpen()*0.90 and \
-        data[count + 3].isPositive()      and isDesc(data[count + 3],data[count + 4]) and \
-        isDesc(data[count + 4],data[count + 5]):
-        
-        data[count + 5].set6RowsStatus(36)
-        if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+def pattern063301(data,count,debug=False): #三手放れ寄せ線
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].hasWindow()           and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].isClose()             and \
+        data[count + 4].isPositive()      and data[count + 5].isAsce()   and data[count + 5].isClose()             and \
+        data[count + 5].isCross()         :
 
-def pattern3700(data,count,debug=False): #上位の上放れ陰線
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isAsce(data[count + 3],data[count + 4]) and \
-        existsWindow(data[count + 3],data[count + 4]) and \
-        data[count + 4].isNegative()      and isDesc(data[count + 4],data[count + 5]):
-        
-        data[count + 5].set6RowsStatus(37)
+        data[count + 5].getAnalysisData().appendStatus(33)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern3800(data,count,debug=False): #宵の明星
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isDesc(data[count + 3],data[count + 4]) and \
-        existsWindow(data[count + 3],data[count + 4]) and \
-        data[count + 4].isNegative()      and isDesc(data[count + 4],data[count + 5]):
-        
-        data[count + 5].set6RowsStatus(38)
-        if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+def pattern073302(data,count,debug=False): #三手放れ寄せ線
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].hasWindow()           and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].isClose()             and \
+        data[count + 4].isPositive()      and data[count + 5].isAsce()   and data[count + 5].isClose()             and \
+        data[count + 5].isPositive()      and data[count + 6].isAsce()   and data[count + 6].isClose()             and \
+        data[count + 6].isCross()         :
 
-def pattern3900(data,count,debug=False): #陽の陽はらみ
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isDesc(data[count + 3],data[count + 4]) and \
-        data[count + 3].getClose()  > data[count + 4].getClose() and \
-        data[count + 3].getOpen() < data[count + 4].getOpen() and \
-        isDesc(data[count + 4],data[count + 5]):
-        
-        data[count + 5].set6RowsStatus(39)
+        data[count + 6].getAnalysisData().appendStatus(33)
         if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
 
-def pattern4000(data,count,debug=False): #最後の抱き陽線
-    if  data[count + 0].isPositive()      and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isNegative()      and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 4].isBigPositive()   and isDesc(data[count + 4],data[count + 5]) and \
-        data[count + 3].getOpen()  < data[count + 4].getClose() and \
-        data[count + 3].getClose() > data[count + 4].getOpen():
-        
-        data[count + 5].set6RowsStatus(40)
-        if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+def pattern083303(data,count,debug=False): #三手放れ寄せ線
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].hasWindow()           and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].isClose()             and \
+        data[count + 4].isPositive()      and data[count + 5].isAsce()   and data[count + 5].isClose()             and \
+        data[count + 5].isPositive()      and data[count + 6].isAsce()   and data[count + 6].isClose()             and \
+        data[count + 6].isPositive()      and data[count + 7].isAsce()   and data[count + 7].isClose()             and \
+        data[count + 7].isCross()         :
 
-def pattern4100(data,count,debug=False): #抱き陽線
-    if  isAsce(data[count + 0],data[count + 1]) and \
-        isAsce(data[count + 1],data[count + 2]) and \
-        isAsce(data[count + 2],data[count + 3]) and \
-        isAsce(data[count + 3],data[count + 4]) and \
-        isAsce(data[count + 4],data[count + 5]) and \
-        data[count + 4].isBigNegative() and isDesc(data[count + 5],data[count + 6]) and \
-        isDesc(data[count + 6],data[count + 7]) and \
-        data[count + 4].getOpen()  > data[count + 5].getClose() and \
-        data[count + 4].getClose() < data[count + 5].getOpen():
-        
-        data[count + 7].set8RowsStatus(41)
+        data[count + 7].getAnalysisData().appendStatus(33)
         if debug:
-            print(data[count + 7].get8RowsStatus().getAnzlyzedDataString())
+            print(data[count + 7].getAnalysisData().getAnalyzedDataString())
 
-def pattern4200(data,count,debug=False): #つたい線の打ち返し
-    if  data[count + 0].isPositive()    and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()    and isAsce(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()    and isAsce(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()    and isDesc(data[count + 3],data[count + 4]) and \
-        data[count + 4].isNegative()    and isDesc(data[count + 4],data[count + 5]) and \
-        data[count + 5].isNegative()    and isAsce(data[count + 5],data[count + 6]) and \
-        data[count + 6].isBigPositive() and isDesc(data[count + 6],data[count + 7]):
-        
-        data[count + 7].set8RowsStatus(42)
-        if debug:
-            print(data[count + 7].get8RowsStatus().getAnzlyzedDataString())
+def pattern063400(data,count,debug=False): #行き詰まり線
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].dontCare()            and \
+        data[count + 3].isBigPositive()   and data[count + 4].isDesc()   and data[count + 4].isClose()             and \
+        data[count + 4].isPositive()      and data[count + 5].isDesc()   and data[count + 5].isClose()             and \
+        data[count + 5].dontCare()        and \
+        data[count + 3].getHigh() > data[count + 3].getClose()*1.10 :
 
-def pattern4300(data,count,debug=False): #放れ五手赤一本
-    if  data[count + 0].isPositive()    and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()    and isAsce(data[count + 1],data[count + 2]) and \
-        existsWindow(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()    and \
-        data[count + 3].isNegative()    and \
-        data[count + 4].isPositive()    and \
-        data[count + 5].isNegative()    and \
-        data[count + 6].isBigPositive() and isDesc(data[count + 6],data[count + 7]):
-        
-        data[count + 7].set8RowsStatus(43)
+        data[count + 5].getAnalysisData().appendStatus(34)
         if debug:
-            print(data[count + 7].get8RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern4400(data,count,debug=False): #放れ七手大黒
-    if  data[count + 0].isPositive()    and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isBigPositive() and \
-        data[count + 2].isSmall()       and not existsWindow(data[count + 1],data[count + 2]) and \
-        data[count + 3].isSmall()       and not existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 4].isSmall()       and not existsWindow(data[count + 3],data[count + 4]) and \
-        data[count + 5].isBigNegative():
-        
-        data[count + 5].set6RowsStatus(44)
-        if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+def pattern063500(data,count,debug=False): #三羽ガラス
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].isPositive()      and data[count + 3].isDesc()   and data[count + 3].isClose()             and \
+        data[count + 3].isNegative()      and data[count + 4].isDesc()   and data[count + 4].isClose()             and \
+        data[count + 4].isNegative()      and data[count + 5].isDesc()   and data[count + 5].isClose()             and \
+        data[count + 5].isNegative()         :
 
-def pattern4400(data,count,debug=False): #放れ七手大黒
-    if  data[count + 0].isPositive()    and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isBigPositive() and \
-        data[count + 2].isSmall()       and not existsWindow(data[count + 1],data[count + 2]) and \
-        data[count + 3].isSmall()       and not existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 4].isBigNegative():
-        
-        data[count + 4].set5RowsStatus(44)
+        data[count + 5].getAnalysisData().appendStatus(35)
         if debug:
-            print(data[count + 4].get5RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern4401(data,count,debug=False): #放れ七手大黒
-    if  data[count + 0].isPositive()    and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isBigPositive() and \
-        data[count + 2].isSmall()       and not existsWindow(data[count + 1],data[count + 2]) and \
-        data[count + 3].isSmall()       and not existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 4].isSmall()       and not existsWindow(data[count + 3],data[count + 4]) and \
-        data[count + 5].isBigNegative():
-        
-        data[count + 5].set6RowsStatus(44)
-        if debug:
-            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
+def pattern063600(data,count,debug=False): #首吊り線
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].hasWindow()           and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].isClose()             and \
+        data[count + 3].isPositive()      and data[count + 4].isDesc()   and data[count + 4].isClose()             and \
+        data[count + 4].dontCare()        and data[count + 5].isDesc()   and data[count + 5].isClose()             and \
+        data[count + 5].dontCare()        and \
+        data[count + 3].getLow()*1.10 < data[count + 3].getOpen() :
 
-def pattern4402(data,count,debug=False): #放れ七手大黒
-    if  data[count + 0].isPositive()    and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isBigPositive() and \
-        data[count + 2].isSmall()       and not existsWindow(data[count + 1],data[count + 2]) and \
-        data[count + 3].isSmall()       and not existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 4].isSmall()       and not existsWindow(data[count + 3],data[count + 4]) and \
-        data[count + 5].isSmall()       and not existsWindow(data[count + 4],data[count + 5]) and \
-        data[count + 6].isBigNegative():
-        
-        data[count + 6].set7RowsStatus(44)
+        data[count + 5].getAnalysisData().appendStatus(36)
         if debug:
-            print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
 
-def pattern4403(data,count,debug=False): #放れ七手大黒
-    if  data[count + 0].isPositive()    and isAsce(data[count + 0],data[count + 1]) and \
-        data[count + 1].isBigPositive() and \
-        data[count + 2].isSmall()       and not existsWindow(data[count + 1],data[count + 2]) and \
-        data[count + 3].isSmall()       and not existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 4].isSmall()       and not existsWindow(data[count + 3],data[count + 4]) and \
-        data[count + 5].isSmall()       and not existsWindow(data[count + 4],data[count + 5]) and \
-        data[count + 6].isSmall()       and not existsWindow(data[count + 5],data[count + 6]) and \
-        data[count + 7].isBigNegative():
-        
-        data[count + 7].set8RowsStatus(44)
+def pattern063700(data,count,debug=False): #上位の上放れ陰線
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].isClose()             and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].hasWindow()           and \
+        data[count + 4].isNegative()      and data[count + 5].isDesc()   and data[count + 5].isClose()             and \
+        data[count + 5].dontCare()        :
+
+        data[count + 5].getAnalysisData().appendStatus(37)
         if debug:
-            print(data[count + 7].get8RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
+
+def pattern063800(data,count,debug=False): #宵の明星
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].hasWindow()           and \
+        data[count + 3].isPositive()      and data[count + 4].isDesc()   and data[count + 4].hasWindow()           and \
+        data[count + 4].isNegative()      and data[count + 5].isDesc()   and data[count + 5].isClose()             and \
+        data[count + 5].dontCare()        :
+
+        data[count + 5].getAnalysisData().appendStatus(38)
+        if debug:
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
+
+def pattern063900(data,count,debug=False): #陽の陽はらみ
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].isBigPositive()   and data[count + 3].isAsce()   and data[count + 3].isClose()             and \
+        data[count + 3].isPositive()      and data[count + 4].isDesc()   and data[count + 4].isIncludedFromPrev()    and \
+        data[count + 4].dontCare()        and data[count + 5].isDesc()   and data[count + 5].isClose()             and \
+        data[count + 5].dontCare()        :
+
+        data[count + 5].getAnalysisData().appendStatus(39)
+        if debug:
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
+
+def pattern064000(data,count,debug=False): #最後の抱き陽線
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].isClose()             and \
+        data[count + 3].isNegative()      and data[count + 4].isAsce()   and data[count + 4].isClose()             and \
+        data[count + 4].isPositive()      and data[count + 5].isDesc()   and data[count + 5].isIncludedPrev()        and \
+        data[count + 5].dontCare()        :
+
+        data[count + 5].getAnalysisData().appendStatus(40)
+        if debug:
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
+
+def pattern084100(data,count,debug=False): #抱き陽線
+    if  data[count + 0].dontCare()        and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].dontCare()        and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].dontCare()        and data[count + 3].isAsce()   and data[count + 3].isClose()             and \
+        data[count + 3].dontCare()        and data[count + 4].isAsce()   and data[count + 4].isClose()             and \
+        data[count + 4].isPositive()      and data[count + 5].dontCare() and data[count + 5].isIncludedPrev()        and \
+        data[count + 5].isNegative()      and data[count + 6].isDesc()   and data[count + 6].isClose()             and \
+        data[count + 6].dontCare()        and data[count + 7].isDesc()   and data[count + 7].isClose()             and \
+        data[count + 7].dontCare()        :
+
+        data[count + 7].getAnalysisData().appendStatus(41)
+        if debug:
+            print(data[count + 7].getAnalysisData().getAnalyzedDataString())
+
+def pattern084200(data,count,debug=False): #つたい線の打ち返し
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].isClose()             and \
+        data[count + 3].isPositive()      and data[count + 4].isDesc()   and data[count + 4].isClose()             and \
+        data[count + 4].isNegative()      and data[count + 5].isDesc()   and data[count + 5].isClose()             and \
+        data[count + 5].isNegative()      and data[count + 6].isAsce()   and data[count + 6].isClose()             and \
+        data[count + 6].isBigPositive()   and data[count + 7].isDesc()   and data[count + 7].isClose()             and \
+        data[count + 7].dontCare()        :
+
+        data[count + 7].getAnalysisData().appendStatus(42)
+        if debug:
+            print(data[count + 7].getAnalysisData().getAnalyzedDataString())
+
+def pattern084300(data,count,debug=False): #放れ五手赤一本
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].dontCare()        and data[count + 3].isAsce()   and data[count + 3].hasWindow()           and \
+        data[count + 3].dontCare()        and data[count + 4].dontCare() and data[count + 4].isClose()             and \
+        data[count + 4].dontCare()        and data[count + 5].dontCare() and data[count + 5].isClose()             and \
+        data[count + 5].dontCare()        and data[count + 6].isAsce()   and data[count + 6].isClose()             and \
+        data[count + 6].isBigPositive()   and data[count + 7].isDesc()   and data[count + 7].isClose()             and \
+        data[count + 7].dontCare()        :
+
+        data[count + 7].getAnalysisData().appendStatus(43)
+        if debug:
+            print(data[count + 7].getAnalysisData().getAnalyzedDataString())
+
+def pattern084400(data,count,debug=False): #放れ七手大黒
+    if  data[count + 0].isPositive()      and data[count + 1].isAsce()   and data[count + 1].hasWindow()           and \
+        data[count + 1].isBigPositive()   and data[count + 2].dontCare() and data[count + 2].isClose()             and \
+        data[count + 2].dontCare()        and data[count + 3].dontCare() and data[count + 3].isClose()             and \
+        data[count + 3].dontCare()        and data[count + 4].dontCare() and data[count + 4].isClose()             and \
+        data[count + 4].dontCare()        and data[count + 5].dontCare() and data[count + 5].isClose()             and \
+        data[count + 5].dontCare()        and data[count + 6].dontCare() and data[count + 6].isClose()             and \
+        data[count + 6].dontCare()        and data[count + 7].dontCare() and data[count + 7].isClose()             and \
+        data[count + 7].isBigNegative()        :
+
+        data[count + 7].getAnalysisData().appendStatus(44)
+        if debug:
+            print(data[count + 7].getAnalysisData().getAnalyzedDataString())
+
+def pattern054500(data,count,debug=False): #差し込み線
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].isClose()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].isClose()             and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].isClose()             and \
+        data[count + 3].isPositive()      and data[count + 4].isDesc()   and data[count + 4].isClose()             and \
+        data[count + 4].dontCare()         :
+
+        data[count + 4].getAnalysisData().appendStatus(45)
+        if debug:
+            print(data[count + 4].getAnalysisData().getAnalyzedDataString())
+
+def pattern074600(data,count,debug=False): #下放れ三手
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].isClose()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].hasWindow()           and \
+        data[count + 2].isPositive()      and data[count + 3].isAsce()   and data[count + 3].isClose()             and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].isClose()             and \
+        data[count + 4].isPositive()      and data[count + 5].dontCare() and data[count + 5].isClose()             and \
+        data[count + 5].isNegative()      and data[count + 6].isDesc()   and data[count + 6].isClose()             and \
+        data[count + 6].dontCare()         :
+
+        data[count + 6].getAnalysisData().appendStatus(46)
+        if debug:
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
+
+def pattern074700(data,count,debug=False): #下げ三法
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].isClose()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].isClose()             and \
+        data[count + 2].isBigNegative()   and data[count + 3].isDesc()   and data[count + 3].isClose()             and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].isClose()             and \
+        data[count + 4].isPositive()      and data[count + 5].isAsce()   and data[count + 5].isClose()             and \
+        data[count + 5].isPositive()      and data[count + 6].isDesc()   and data[count + 6].isClose()             and \
+        data[count + 6].isNegative()         :
+
+        data[count + 6].getAnalysisData().appendStatus(47)
+        if debug:
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
+
+def pattern074800(data,count,debug=False): #三手打ち
+    if  data[count + 0].isNegative()      and data[count + 1].dontCare() and data[count + 1].isClose()             and \
+        data[count + 1].isPositive()      and data[count + 2].isDesc()   and data[count + 2].isClose()             and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].isClose()             and \
+        data[count + 3].isNegative()      and data[count + 4].isDesc()   and data[count + 4].isClose()             and \
+        data[count + 4].isNegative()      and data[count + 5].dontCare() and data[count + 5].isClose()             and \
+        data[count + 5].isBigPositive()   and data[count + 6].dontCare() and data[count + 6].isClose()             and \
+        data[count + 6].isCross()         :
+
+        data[count + 6].getAnalysisData().appendStatus(48)
+        if debug:
+            print(data[count + 6].getAnalysisData().getAnalyzedDataString())
+
+def pattern054900(data,count,debug=False): #下落途上の連続タスキ
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].isClose()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].isClose()             and \
+        data[count + 2].isNegative()      and data[count + 3].isAsce()   and data[count + 3].isClose()           and \
+        data[count + 3].isPositive()      and data[count + 4].isDesc()   and data[count + 4].isClose()             and \
+        data[count + 4].dontCare()         :
+
+        data[count + 4].getAnalysisData().appendStatus(49)
+        if debug:
+            print(data[count + 4].getAnalysisData().getAnalyzedDataString())
+
+def pattern065000(data,count,debug=False): #化け線
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].isClose()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].isClose()             and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].isClose()             and \
+        data[count + 3].isNegative()      and data[count + 4].isAsce()   and data[count + 4].isClose()             and \
+        data[count + 4].isBigPositive()   and data[count + 5].dontCare() and data[count + 5].isClose()             and \
+        data[count + 5].isCross()         :
+
+        data[count + 5].getAnalysisData().appendStatus(50)
+        if debug:
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
+
+def pattern065100(data,count,debug=False): #下げ足のクロス
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].isClose()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].isClose()             and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].isClose()             and \
+        data[count + 3].isCross()         and data[count + 4].isDesc()   and data[count + 4].isClose()             and \
+        data[count + 4].dontCare()        and data[count + 5].isDesc()   and data[count + 5].isClose()             and \
+        data[count + 5].dontCare()        :
+
+        data[count + 5].getAnalysisData().appendStatus(51)
+        if debug:
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
+
+def pattern065200(data,count,debug=False): #下放れ黒二本
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].isClose()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].isClose()             and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].hasWindow()           and \
+        data[count + 3].isNegative()      and data[count + 4].dontCare() and data[count + 4].isClose()             and \
+        data[count + 4].isNegative()      and data[count + 5].isDesc()   and data[count + 5].isClose()             and \
+        data[count + 5].dontCare()         :
+
+        data[count + 5].getAnalysisData().appendStatus(52)
+        if debug:
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
+
+def pattern065300(data,count,debug=False): #下げの三つ星
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].isClose()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].isClose()             and \
+        data[count + 2].isSmallNegative() and data[count + 3].isAsce()   and data[count + 3].isClose()             and \
+        data[count + 3].isSmallPositive() and data[count + 4].isAsce()   and data[count + 4].isClose()             and \
+        data[count + 4].isSmallPositive() and data[count + 5].isAsce()   and data[count + 5].isClose()             and \
+        data[count + 5].dontCare()        :
+
+        data[count + 5].getAnalysisData().appendStatus(53)
+        if debug:
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
+
+def pattern065400(data,count,debug=False): #上位の陰線五本
+    if  data[count + 0].isBigPositive()   and data[count + 1].dontCare() and data[count + 1].isClose()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].isClose()             and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].isClose()             and \
+        data[count + 3].isNegative()      and data[count + 4].isDesc()   and data[count + 4].isClose()             and \
+        data[count + 4].isNegative()      and data[count + 5].isDesc()   and data[count + 5].isClose()             and \
+        data[count + 5].isNegative()         :
+
+        data[count + 5].getAnalysisData().appendStatus(54)
+        if debug:
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
+
+def pattern065500(data,count,debug=False): #寄り切り陰線
+    if  data[count + 0].isSmall()         and data[count + 1].isAsce()   and data[count + 1].isClose()             and \
+        data[count + 1].isSmall()         and data[count + 2].isAsce()   and data[count + 2].isClose()             and \
+        data[count + 2].isSmall()         and data[count + 3].isAsce()   and data[count + 3].isClose()           and \
+        data[count + 3].isSmall()         and data[count + 4].isDesc()   and data[count + 4].isClose()             and \
+        data[count + 4].isBigNegative()   and data[count + 5].isDesc()   and data[count + 5].isClose()             and \
+        data[count + 5].dontCare()        and \
+        data[count + 4].getCandleState() == 12 and data[count + 4].getCandleState() == 13 :
+
+        data[count + 5].getAnalysisData().appendStatus(55)
+        if debug:
+            print(data[count + 5].getAnalysisData().getAnalyzedDataString())
+
+
+
+

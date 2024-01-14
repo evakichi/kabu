@@ -116,22 +116,23 @@ class AnalyzedData:
               "予約04"               #69
               ]
     
-    state = -1
+    state = None
 
     def __init__(self) -> None:
-        self.state = -1
+        self.state = list()
         pass    
     
-    def setStatus(self,state):
-        self.state = state
+    def appendStatus(self,state):
+        self.state.append(state)
 
     def getAnzlyzedData(self):
         return self.state
     
-    def getAnzlyzedDataString(self):
-        if self.state == -1:
-            return ""
-        return self.status[self.state]
+    def getAnalyzedDataString(self):
+        msg = ""
+        for s in self.state:
+            msg += self.status[s]+","
+        return msg
     
 class Data:
     date             = ""
@@ -165,15 +166,8 @@ class Data:
     cross = False
 
     candleState = None
+    analysisData = None
 
-    analysis1Row = None
-    analysis2Rows = None
-    analysis3Rows = None
-    analysis4Rows = None
-    analysis5Rows = None
-    analysis6Rows = None
-    analysis7Rows = None
-    analysis8Rows = None
     highBeard = False
     higherBeard = False
     lowBeard = False
@@ -196,20 +190,13 @@ class Data:
 
     def __init__(self,data,windoFactor,beardFactor) -> None:
         self.candleState   = CandleState()
-        self.analysis1Row  = AnalyzedData()
-        self.analysis2Rows = AnalyzedData()
-        self.analysis3Rows = AnalyzedData()
-        self.analysis4Rows = AnalyzedData()
-        self.analysis5Rows = AnalyzedData()
-        self.analysis6Rows = AnalyzedData()
-        self.analysis7Rows = AnalyzedData()
-        self.analysis8Rows = AnalyzedData()
+        self.analysisData  = AnalyzedData()
         self.desc = False
         self.asce = False
         self.flat = False
         self.includedFromPrev = False
         self.includePrev = False
-        self.hasWindowRegion = False
+        self.hasWindowRegion = True
         self.windowFactor = windoFactor
         self.beardFactor = beardFactor
 
@@ -254,6 +241,16 @@ class Data:
             self.maxValue = self.open
             self.minValue = self.close
             self.negative = True
+        if self.close > self.open:
+            self.maxValue = self.close
+            self.minValue = self.open
+            self.positive = True
+        if self.close == self.open:
+            self.maxValue = self.open
+            self.minValue = self.open
+            self.closs = True
+
+        if self.open > self.close:
             self.candleState.setState(10)
             if self.open > self.close*1.10:
                 self.bigNegative = True
@@ -287,10 +284,8 @@ class Data:
                 self.lowBeard = True
                 if self.low*(1+beardFactor) < self.close:
                     self.lowerBeard = True
-        elif self.close > self.open:
-            self.maxValue = self.close
-            self.minValue = self.open
-            self.positive = True
+        
+        if self.close > self.open:
             self.candleState.setState(0)
             if self.close > self.open*1.10:
                 self.bigPositive = True
@@ -324,10 +319,8 @@ class Data:
                 self.lowBeard = True
                 if self.low*(1+beardFactor) < self.open:
                     self.lowerBeard = True
-        else:
-            self.maxValue = self.open
-            self.minValue = self.open
-            self.cross = True
+
+        if self.open == self.close:
             if self.high > self.open and self.open > self.low:
                 self.candleState.setState(20)
             if self.high == self.open and self.open > self.low:
@@ -369,36 +362,22 @@ class Data:
         worksheet[f'Q{count}']  = self.getFactor()
         worksheet[f'R{count}']  = self.minValue
         worksheet[f'S{count}']  = self.maxValue
-        worksheet[f'AA{count}']  = self.get1RowStatus().getAnzlyzedDataString()
-        worksheet[f'AB{count}']  = self.get2RowsStatus().getAnzlyzedDataString()
-        worksheet[f'AC{count}']  = self.get3RowsStatus().getAnzlyzedDataString()
-        worksheet[f'AD{count}']  = self.get4RowsStatus().getAnzlyzedDataString()
-        worksheet[f'AA{count}']  = self.get5RowsStatus().getAnzlyzedDataString()
-        worksheet[f'AB{count}']  = self.get6RowsStatus().getAnzlyzedDataString()
-        worksheet[f'AC{count}']  = self.get7RowsStatus().getAnzlyzedDataString()
-        worksheet[f'AD{count}']  = self.get8RowsStatus().getAnzlyzedDataString()
-        worksheet[f'AE{count}']  = ""
-        worksheet[f'AF{count}']  = ""
-        worksheet[f'AG{count}']  = ""
-        worksheet[f'AH{count}'] = ""
-        worksheet[f'AI{count}'] = ""
-        worksheet[f'AJ{count}'] = ""
-        worksheet[f'AK{count}'] = ""
+        worksheet[f'T{count}']  = self.getAnalysisData().getAnalyzedDataString()
 
     def setFactor(self,prev):
-        if prev.max() == self.max() and prev.min() == prev.min():
-            self.flat = True
         if prev.max() > self.max() and prev.min() < self.min():
             self.includedFromPrev = True
         if prev.max() < self.max() and prev.min() > self.min():
             self.includePrev = True
-        if prev.max() < self.max():
-            if prev.max()*(1.0 + self.windowFactor) <= self.min():
-                self.hasWindowRegion = True    
+        if prev.max()*(1.0 + self.windowFactor) <= self.min():
+            self.hasWindowRegion=True 
+        if prev.min() >= self.max()*(1.0 + self.windowFactor):
+            self.hasWindowRegion = True    
+        if prev.max() == self.max() and prev.min() == prev.min():
+            self.flat = True
+        if prev.max() < self.max() and prev.min() < self.min():
             self.asce = True
-        if prev.min() > self.min():
-            if prev.min() >= self.max()*(1.0 + self.windowFactor):
-                self.hasWindowRegion = True    
+        if prev.min() > self.min() and prev.max() > self.max() :
             self.desc = True
 
     def isFlat(self):
@@ -408,7 +387,7 @@ class Data:
         return self.includedFromPrev
 
     def isIncludePrev(self):
-        return self.includedPrev
+        return self.includePrev
 
     def hasWindow(self):
         return self.hasWindowRegion
@@ -423,7 +402,7 @@ class Data:
         return self.asce
     
     def printFactors(self):
-        print (f'cross={self.cross},includedFromPrev={self.includedFromPrev},includePrev={self.includePrev},hasWindow={self.hasWindowRegion},Desc={self.desc},Asce={self.asce}')
+        print (f'Desc={self.desc}\tAsce={self.asce}\tnegative={self.negative}\tporitive={self.positive}\tcross={self.cross}\tincludedFromPrev={self.includedFromPrev}\tincludePrev={self.includePrev}\thasWindow={self.hasWindowRegion}')
 
     def getOpen(self):
         return self.open
@@ -464,6 +443,15 @@ class Data:
     def dontCare(self):
         return True
 
+    def isBig(self):
+        return self.isBigNegative() or self.isBigPositive()
+
+    def isSmall(self):
+        return self.isBigNegative() or self.isBigPositive()
+
+    def isTiny(self):
+        return self.isTinyNegative() or self.isTinyPositive()
+
     def isPositive(self):
         return self.positive
 
@@ -491,65 +479,11 @@ class Data:
     def isCross(self):
         return self.cross
     
-    def isBig(self):
-        return self.isBigNegative() or self.isBigPositive()
-
-    def isSmall(self):
-        return self.isBigNegative() or self.isBigPositive()
-
-    def isTiny(self):
-        return self.isTinyNegative() or self.isTinyPositive()
-
     def getCandleState(self):
         return self.candleState
 
     def getCandleStateString(self):
         return self.candleState.getState()
     
-    def set1RowStatus(self,status):
-        self.analysis1Row.setStatus(status)
-
-    def get1RowStatus(self):
-        return self.analysis1Row
-
-    def set2RowsStatus(self,status):
-        self.analysis2Rows.setStatus(status)
-
-    def get2RowsStatus(self):
-        return self.analysis2Rows
-
-    def set3RowsStatus(self,status):
-        self.analysis3Rows.setStatus(status)
-
-    def get3RowsStatus(self):
-        return self.analysis3Rows
-
-    def set4RowsStatus(self,status):
-        self.analysis4Rows.setStatus(status)
-
-    def get4RowsStatus(self):
-        return self.analysis4Rows
-
-    def set5RowsStatus(self,status):
-        self.analysis5Rows.setStatus(status)
-
-    def get5RowsStatus(self):
-        return self.analysis5Rows
-
-    def set6RowsStatus(self,status):
-        self.analysis6Rows.setStatus(status)
-
-    def get6RowsStatus(self):
-        return self.analysis6Rows
-    
-    def set7RowsStatus(self,status):
-        self.analysis7Rows.setStatus(status)
-
-    def get7RowsStatus(self):
-        return self.analysis7Rows
-    
-    def set8RowsStatus(self,status):
-        self.analysis8Rows.setStatus(status)
-
-    def get8RowsStatus(self):
-        return self.analysis8Rows
+    def getAnalysisData(self):
+        return self.analysisData
