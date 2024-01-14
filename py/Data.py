@@ -413,6 +413,9 @@ class Data:
     def hasWindow(self):
         return self.hasWindowRegion
 
+    def isClose(self):
+        return not self.hasWindowRegion
+
     def isDesc(self):
         return self.desc
 
