@@ -1,5 +1,48 @@
 import sys
 
+class CandleState:
+    status = ["陽の基本形",           #0
+              "大陽の基本形",         #1
+              "陽の丸坊主",           #2
+              "陽の大引け坊主",       #3
+              "陽の寄り付き坊主",     #4
+              "小陽の基本形",         #5
+              "下影陽線",             #6
+              "陽のコマ",             #7
+              "上影陽線",             #8
+              "陽のカラカサ",         #9
+              "陰の基本形",           #10
+              "大陰の基本形",         #11
+              "陰の丸坊主",           #12
+              "陽の寄り付き坊主",     #13
+              "陰の大引け坊主",       #14
+              "小陰の基本形",         #15
+              "下影陰線",             #16
+              "陰のコマ",             #17
+              "上影陰線",             #18
+              "陰のカラカサ",         #19
+              "十字線の基本形",       #20
+              "トンカチ",             #21
+              "トンボ",               #22
+              "足長クロス",           #23
+              "トウバ",               #24
+              "一本線"                #25
+             ]
+    
+    state = -1
+
+    def __init__(self) -> None:
+        self.state = -1
+
+    def setState(self,state):
+        self.state = state
+
+    def getState(self):
+        return self.state
+
+    def getStateString(self):
+        return self.status[self.state]
+
 class AnalyzedData:
     status = ["三空叩き込み",         #0
               "三手大陰線",           #1
@@ -56,7 +99,21 @@ class AnalyzedData:
               "下放れ黒二本",         #52
               "下げの三つ星",         #53
               "上位の陰線五本",       #54
-              "寄り切り陰線"          #55
+              "寄り切り陰線",         #55
+              "予約01",               #56
+              "予約02",               #57
+              "予約03",               #58
+              "予約04",               #59
+              "予約05",               #60
+              "予約06",               #61
+              "予約07",               #61
+              "予約08",               #63
+              "予約09",               #64
+              "予約00",               #65
+              "予約01",               #66
+              "予約02",               #67
+              "予約03",               #68
+              "予約04"               #69
               ]
     
     state = -1
@@ -92,18 +149,70 @@ class Data:
     adjustmentLow    = 0.0
     adjustmentClose  = 0.0
     adjustmentVolume = 0
-    analysis5Days = None
-    analysis6Days = None
-    analysis7Days = None
-    analysis8Days = None
+
+    maxValue = 0.0
+    minValue = 0.0
+
+    positive = False
+    negative = False
+    bigPositive = False
+    bigNegative = False
+    smallPositive = False
+    smallNegative = False
+    tinyPositive = False
+    tinyNegative = False
+
+    cross = False
+
+    candleState = None
+
+    analysis1Row = None
+    analysis2Rows = None
+    analysis3Rows = None
+    analysis4Rows = None
+    analysis5Rows = None
+    analysis6Rows = None
+    analysis7Rows = None
+    analysis8Rows = None
+    highBeard = False
+    higherBeard = False
+    lowBeard = False
+    lowerBeard = False
+
+    desc = False
+    asce = False
+    flat     = False
+
+    includedFromPrev = False
+    includePrev = False
+    
+    hasWindowRegion = False
 
     isNoneValue = False
 
-    def __init__(self,data) -> None:
-        self.analysis5Days = AnalyzedData()
-        self.analysis6Days = AnalyzedData()
-        self.analysis7Days = AnalyzedData()
-        self.analysis8Days = AnalyzedData()
+    windowFactor = 0.1
+    beardFactor = 0.1
+    
+
+    def __init__(self,data,windoFactor,beardFactor) -> None:
+        self.candleState   = CandleState()
+        self.analysis1Row  = AnalyzedData()
+        self.analysis2Rows = AnalyzedData()
+        self.analysis3Rows = AnalyzedData()
+        self.analysis4Rows = AnalyzedData()
+        self.analysis5Rows = AnalyzedData()
+        self.analysis6Rows = AnalyzedData()
+        self.analysis7Rows = AnalyzedData()
+        self.analysis8Rows = AnalyzedData()
+        self.desc = False
+        self.asce = False
+        self.flat = False
+        self.includeedFromPrev = False
+        self.includePrev = False
+        self.hasWindowRegion = False
+        self.windowFactor = windoFactor
+        self.beardFactor = beardFactor
+
         if data['Open'] == None or data['High'] == None or data['Low'] == None or data['Close'] == None:
             self.isNoneValue = True
             return None
@@ -123,6 +232,122 @@ class Data:
         self.adjustmentClose   = float(data['AdjustmentClose'])
         self.adjustmentVolume  = int(data['AdjustmentVolume'])
 
+        self.maxValue =0.0
+        self.minValue =0.0
+
+        self.negative = False
+        self.positive = False
+        self.bigNegative = False
+        self.bigPositive = False
+        self.smallNegative = False
+        self.smallPositive = False
+        self.tinyNegative = False
+        self.tinyPositive = False
+
+        self.highBeard = False
+        self.lowBeard = False
+
+        self.higherBeard = False
+        self.lowerBeard = False
+
+        if self.open > self.close:
+            self.maxValue = self.open
+            self.minValue = self.close
+            self.negative = True
+            self.candleState.setState(10)
+            if self.open > self.close*1.10:
+                self.bigNegative = True
+                if self.high > self.open and self.low < self.close:
+                    self.candleState.setState(11)
+                if self.high == self.open and self.low == self.close:
+                    self.candleState.setState(12)
+                if self.high == self.open and self.low < self.close:
+                    self.candleState.setState(13)
+                if self.high > self.open and self.low == self.close:
+                    self.candleState.setState(14)
+            if self.close* 1.03 < self.open <= self.close*1.10:
+                self.smallNegative = True
+                if self.high > self.open and self.low < self.close:
+                    self.candleState.setState(15)
+                if self.high > self.open and self.low < self.close and (self.high - self.open) < (self.close - self.low):
+                    self.candleState.setState(16)
+                if self.high > self.open * (1 + self.beardFactor) and self.low  * (1 + self.beardFactor) < self.close:
+                    self.candleState.setState(17)
+                if self.high > self.open and self.low < self.close and (self.high - self.open) > (self.close - self.low):
+                    self.candleState.setState(18)
+                if self.high == self.open and self.low * (1 + self.beardFactor) < self.close:
+                    self.candleState.setState(19)
+            if self.open <= self.close *1.03:
+                self.tinyNegative = True
+            if self.high > self.open:
+                self.highBeard = True
+                if self.high >= self.open*(1+beardFactor):
+                    self.higherBeard = True
+            if self.low < self.close:
+                self.lowBeard = True
+                if self.low*(1+beardFactor) < self.close:
+                    self.lowerBeard = True
+        elif self.close > self.open:
+            self.maxValue = self.close
+            self.minValue = self.open
+            self.positive = True
+            self.candleState.setState(0)
+            if self.close > self.open*1.10:
+                self.bigPositive = True
+                if self.high > self.close and self.low < self.open:
+                    self.candleState.setState(1)
+                if self.high == self.close and self.low == self.open:
+                    self.candleState.setState(2)
+                if self.high == self.close and self.low < self.open:
+                    self.candleState.setState(3)
+                if self.high > self.close and self.low == self.open:
+                    self.candleState.setState(4)                    
+            if self.open* 1.03 < self.close <= self.open*1.10:
+                self.smallPositive = True
+                if self.high > self.close and self.low < self.open:
+                    self.candleState.setState(5)
+                if self.high > self.close and self.low < self.open and (self.high - self.close) < (self.open - self.low):
+                    self.candleState.setState(6)
+                if self.high > self.close * (1 + self.beardFactor) and self.low  * (1 + self.beardFactor) < self.open:
+                    self.candleState.setState(7)
+                if self.high > self.close and self.low < self.open and (self.high - self.close) > (self.open - self.low):
+                    self.candleState.setState(8)
+                if self.high == self.close and self.low * (1 + self.beardFactor) < self.open:
+                    self.candleState.setState(9)
+            if self.close <= self.open*1.03:
+                self.tinyPositive = True
+            if self.high > self.close:
+                self.highBeard = True
+                if self.high >= self.close*(1+beardFactor):
+                    self.higherBeard = True
+            if self.low < self.open:
+                self.lowBeard = True
+                if self.low*(1+beardFactor) < self.open:
+                    self.lowerBeard = True
+        else:
+            self.maxValue = self.open
+            self.minValue = self.open
+            self.cross = True
+            if self.high > self.open and self.open > self.low:
+                self.candleState.setState(20)
+            if self.high == self.open and self.open > self.low:
+                self.candleState.setState(21)
+            if self.high > self.open and self.open > self.low and ((self.high - self.open)*(1 + self.beardFactor) < (self.open - self.low)):
+                self.candleState.setState(22)
+            if (self.high - self.open) >  (self.open * self.beardFactor) and (self.open - self.low) > (self.open * self.beardFactor):
+                self.candleState.setState(23)
+            if self.high > self.open and self.open == self.low:
+                self.candleState.setState(24)
+            if self.high == self.open and self.open == self.low:
+                self.candleState.setState(25)
+            if self.high > self.open:
+                self.highBeard = True
+                if self.high >= self.open*(1+beardFactor):
+                    self.higherBeard = True
+            if self.low < self.open:
+                self.lowBeard = True
+                if self.low*(1+beardFactor) < self.open:
+                    self.lowerBeard = True
 
     def write(self,worksheet,count):
         worksheet[f'A{count}']  = self.date
@@ -140,14 +365,18 @@ class Data:
         worksheet[f'M{count}']  = self.adjustmentLow
         worksheet[f'N{count}']  = self.adjustmentClose
         worksheet[f'O{count}']  = self.adjustmentVolume
-        worksheet[f'P{count}']  = self.getCandleState()
-        worksheet[f'Q{count}']  = self.getRatio()
-        worksheet[f'R{count}']  = self.min()
-        worksheet[f'S{count}']  = self.max()
-        worksheet[f'AA{count}']  = self.get5DaysStatus().getAnzlyzedDataString()
-        worksheet[f'AB{count}']  = self.get6DaysStatus().getAnzlyzedDataString()
-        worksheet[f'AC{count}']  = self.get7DaysStatus().getAnzlyzedDataString()
-        worksheet[f'AD{count}']  = self.get8DaysStatus().getAnzlyzedDataString()
+        worksheet[f'P{count}']  = self.getCandleState().getStateString()
+        worksheet[f'Q{count}']  = self.getFactor()
+        worksheet[f'R{count}']  = self.minValue
+        worksheet[f'S{count}']  = self.maxValue
+        worksheet[f'AA{count}']  = self.get1RowStatus().getAnzlyzedDataString()
+        worksheet[f'AB{count}']  = self.get2RowsStatus().getAnzlyzedDataString()
+        worksheet[f'AC{count}']  = self.get3RowsStatus().getAnzlyzedDataString()
+        worksheet[f'AD{count}']  = self.get4RowsStatus().getAnzlyzedDataString()
+        worksheet[f'AA{count}']  = self.get5RowsStatus().getAnzlyzedDataString()
+        worksheet[f'AB{count}']  = self.get6RowsStatus().getAnzlyzedDataString()
+        worksheet[f'AC{count}']  = self.get7RowsStatus().getAnzlyzedDataString()
+        worksheet[f'AD{count}']  = self.get8RowsStatus().getAnzlyzedDataString()
         worksheet[f'AE{count}']  = ""
         worksheet[f'AF{count}']  = ""
         worksheet[f'AG{count}']  = ""
@@ -155,6 +384,48 @@ class Data:
         worksheet[f'AI{count}'] = ""
         worksheet[f'AJ{count}'] = ""
         worksheet[f'AK{count}'] = ""
+
+    def setFactor(self,prev):
+        if prev.max() == self.max() and prev.min() == prev.min():
+            self.flat = True
+            return 
+        if prev.max() > self.max() and prev.min() < self.min():
+            self.includedPrev = True
+            return 
+        if prev.max() < self.max() and prev.min() > self.min():
+            self.includePrev = True
+            return
+        if prev.max() < self.max():
+            if prev.max()*(1+self.windowFactor) <= self.min():
+                self.hasWindowRegion = True    
+            self.asce = True
+            return
+        if prev.min() > self.min():
+            if prev.min() >= self.max()*(1.0+self.windowFactor):
+                self.hasWindowRegion = True    
+            self.desc = True
+            return
+
+    def isFlat(self):
+        return self.flat
+
+    def isIncludedFromPrev(self):
+        return self.includedFromPrev
+
+    def isIncludePrev(self):
+        return self.includedPrev
+
+    def hasWindow(self):
+        return self.hasWindowRegion
+
+    def isDesc(self):
+        return self.desc
+
+    def isAsce(self):
+        return self.asce
+    
+    def printFactors(self):
+        print (f'cross={self.cross},includedFromPrev={self.includedFromPrev},includePrev={self.includePrev},hasWindow={self.hasWindowRegion},Desc={self.desc},Asce={self.asce}')
 
     def getOpen(self):
         return self.open
@@ -169,113 +440,115 @@ class Data:
         return self.close
 
     def min(self):
-        if not self.isNoneValue:
-            if self.open < self.close:
-                return self.open
-            return self.close
-        return -1*(sys.maxsize-1)
-
+        return self.minValue
+    
     def max(self):
-        if not self.isNoneValue:
-            if self.open > self.close:
-                return self.open
-            return self.close
-        return sys.maxsize-1
-
+        return self.maxValue
+    
     def isNone(self):
         return self.isNoneValue
     
     def getAvg(self):
-        if self.isNoneValue:
-            return 0.0
         return (self.open + self.high + self.low + self.close) / 4
 
-    def getRatio(self):
-        if self.isNoneValue:
-            return 0.0
-        return (self.close - self.open) / self.getAvg()
+    def getFactor(self):
+        return (self.maxValue -self.minValue)/self.getAvg()
 
-    def getAbsRatio(self):
-        if self.isNoneValue:
-            return 0.0
-        return abs(self.getRatio())
-    
+    def getRatio(self):
+        return self.getFactor()
+
+    def getAbsFactor(self):
+        return abs(self.getFactor())
+
+    def getAbsRatio(self):  
+        return self.getAbsFactor()
+        
     def isPositive(self):
-        if not self.isNoneValue and self.open < self.close:
-            return True
-        return False
+        return self.positive
 
     def isNegative(self):
-        if not self.isNoneValue and self.open > self.close:
-            return True
-        return False
-
-    def isCross(self):
-        if not self.isNoneValue and self.open == self.close:
-            return True
-        return False
-
-    def isSmallPositive(self):
-        if self.isPositive():
-            if self.getAbsRatio() < 0.03:
-                return True
-        return False
-
+        return self.negative
+        
     def isBigPositive(self):
-        if self.isPositive():
-            if self.getAbsRatio() >= 0.1:
-                return True
-        return False
-
-    def isSmallNegative(self):
-        if self.isNegative():
-            if self.getAbsRatio() < 0.03:
-                return True
-        return False
+        return self.bigPositive
 
     def isBigNegative(self):
-        if self.isNegative():
-            if self.getAbsRatio() >= 0.1:
-                return True
-        return False
+        return self.bigNegative
 
+    def isSmallPositive(self):
+        return self.smallPositive
+
+    def isSmallNegative(self):
+        return self.smallNegative
+
+    def isTinyPositive(self):
+        return self.tinyPositive
+
+    def isTinyNegative(self):
+        return self.tinyNegative
+
+    def isCross(self):
+        return self.cross
+    
     def isBig(self):
         return self.isBigNegative() or self.isBigPositive()
 
     def isSmall(self):
         return self.isBigNegative() or self.isBigPositive()
 
+    def isTiny(self):
+        return self.isTinyNegative() or self.isTinyPositive()
+
     def getCandleState(self):
-        if self.isBigNegative():
-            return "大陰線"
-        if self.isSmallNegative():
-            return "小陰線"
-        if self.isBigPositive():
-            return "大陽線"
-        if self.isSmallPositive():
-            return "小陽線"
-        return "十字線"
+        return self.candleState
+
+    def getCandleStateString(self):
+        return self.candleState.getState()
     
-    def set5DaysStatus(self,status):
-        self.analysis5Days.setStatus(status)
+    def set1RowStatus(self,status):
+        self.analysis1Row.setStatus(status)
 
-    def get5DaysStatus(self):
-        return self.analysis5Days
+    def get1RowStatus(self):
+        return self.analysis1Row
 
-    def set6DaysStatus(self,status):
-        self.analysis6Days.setStatus(status)
+    def set2RowsStatus(self,status):
+        self.analysis2Rows.setStatus(status)
 
-    def get6DaysStatus(self):
-        return self.analysis6Days
+    def get2RowsStatus(self):
+        return self.analysis2Rows
+
+    def set3RowsStatus(self,status):
+        self.analysis3Rows.setStatus(status)
+
+    def get3RowsStatus(self):
+        return self.analysis3Rows
+
+    def set4RowsStatus(self,status):
+        self.analysis4Rows.setStatus(status)
+
+    def get4RowsStatus(self):
+        return self.analysis4Rows
+
+    def set5RowsStatus(self,status):
+        self.analysis5Rows.setStatus(status)
+
+    def get5RowsStatus(self):
+        return self.analysis5Rows
+
+    def set6RowsStatus(self,status):
+        self.analysis6Rows.setStatus(status)
+
+    def get6RowsStatus(self):
+        return self.analysis6Rows
     
-    def set7DaysStatus(self,status):
-        self.analysis7Days.setStatus(status)
+    def set7RowsStatus(self,status):
+        self.analysis7Rows.setStatus(status)
 
-    def get7DaysStatus(self):
-        return self.analysis7Days
+    def get7RowsStatus(self):
+        return self.analysis7Rows
     
-    def set8DaysStatus(self,status):
-        self.analysis8Days.setStatus(status)
+    def set8RowsStatus(self,status):
+        self.analysis8Rows.setStatus(status)
 
-    def get8DaysStatus(self):
-        return self.analysis8Days
+    def get8RowsStatus(self):
+        return self.analysis8Rows
