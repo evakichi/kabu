@@ -207,7 +207,7 @@ class Data:
         self.desc = False
         self.asce = False
         self.flat = False
-        self.includeedFromPrev = False
+        self.includedFromPrev = False
         self.includePrev = False
         self.hasWindowRegion = False
         self.windowFactor = windoFactor
@@ -388,23 +388,18 @@ class Data:
     def setFactor(self,prev):
         if prev.max() == self.max() and prev.min() == prev.min():
             self.flat = True
-            return 
         if prev.max() > self.max() and prev.min() < self.min():
-            self.includedPrev = True
-            return 
+            self.includedFromPrev = True
         if prev.max() < self.max() and prev.min() > self.min():
             self.includePrev = True
-            return
         if prev.max() < self.max():
-            if prev.max()*(1+self.windowFactor) <= self.min():
+            if prev.max()*(1.0 + self.windowFactor) <= self.min():
                 self.hasWindowRegion = True    
             self.asce = True
-            return
         if prev.min() > self.min():
-            if prev.min() >= self.max()*(1.0+self.windowFactor):
+            if prev.min() >= self.max()*(1.0 + self.windowFactor):
                 self.hasWindowRegion = True    
             self.desc = True
-            return
 
     def isFlat(self):
         return self.flat
@@ -462,7 +457,10 @@ class Data:
 
     def getAbsRatio(self):  
         return self.getAbsFactor()
-        
+
+    def dontCare(self):
+        return True
+
     def isPositive(self):
         return self.positive
 

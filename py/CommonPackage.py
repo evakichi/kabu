@@ -89,213 +89,206 @@ def getPastDays(worksheet,current,days):
     return pastDays
 
 def pattern0000(data,count,debug=False): #三空叩き込み
-    if  data[count + 0].isNegative() and data[count +1].isDesc():
-        pass
-    if  data[count + 0].isNegative() and isDesc(data[count + 0],data[count + 1]) and \
-        existsWindow(data[count + 0],data[count +1]) and \
-        data[count + 1].isNegative() and isDesc(data[count + 1],data[count + 2]) and \
-        existsWindow(data[count + 1],data[count +2]) and \
-        data[count + 2].isNegative() and isDesc(data[count + 2],data[count + 3]) and \
-        existsWindow(data[count + 2],data[count +3]) and \
-        data[count + 3].isNegative() and isDesc(data[count + 3],data[count + 4]):
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].hasWindow()           and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].hasWindow()           and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].hasWindow()           and \
+        data[count + 3].isNegative()      and data[count + 4].isAsce()   and data[count + 4].dontCare()            and \
+        data[count + 4].dontCare()        :
 
         data[count + 4].set5RowsStatus(0)
         if debug:
             print(data[count + 4].get5RowsStatus().getAnzlyzedDataString())
 
 def pattern0100(data,count,debug=False): #三手大陰線
-    if  data[count + 0].isNegative()    and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isBigNegative() and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isBigNegative() and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isBigNegative() and isDesc(data[count + 3],data[count + 4]):
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()            and \
+        data[count + 1].isBigNegative()   and data[count + 2].isDesc()   and data[count + 2].dontCare()            and \
+        data[count + 2].isBigNegative()   and data[count + 3].isDesc()   and data[count + 3].dontCare()            and \
+        data[count + 3].isBigNegative()   and data[count + 4].isDesc()   and data[count + 4].dontCare()            and \
+        data[count + 4].dontCare()        :
 
-        data[count + 4].set5RowsStatus(1)
+        data[count + 4].set5RowsStatus(0)
         if debug:
             print(data[count + 4].get5RowsStatus().getAnzlyzedDataString())
 
 def pattern0200(data,count,debug=False): #最後の抱き陰線
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 3].isSmallPositive() and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 4].isBigNegative():
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()            and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()            and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].dontCare()            and \
+        data[count + 3].isPositive()      and data[count + 4].dontCare() and data[count + 4].includePrev()         and \
+        data[count + 4].isBigNegative()   :
 
-        data[count + 4].set5RowsStatus(2)
+        data[count + 4].set5RowsStatus(0)
         if debug:
             print(data[count + 4].get5RowsStatus().getAnzlyzedDataString())
 
 def pattern0300(data,count,debug=False): #明けの明星
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isNegative()      and isDesc(data[count + 3],data[count + 4]) and \
-        existsWindow(data[count + 3],data[count + 4]) and \
-        data[count + 4].isPositive()      and isAsce(data[count + 4],data[count + 5]) and \
-        existsWindow(data[count + 4],data[count + 5]) and \
-        data[count + 5].isPositive()      and isAsce(data[count + 5],data[count + 6]) and \
-        data[count + 6].isPositive():
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()            and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()            and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].hasWindow()           and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].hasWindow()           and \
+        data[count + 4].isPositive()      and data[count + 5].isAsce()   and data[count + 5].dontCare()            and \
+        data[count + 5].isPositive()      :
 
-        data[count + 6].set7RowsStatus(3)
+        data[count + 5].set6RowsStatus(0)
         if debug:
-            print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
+            print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
 
 def pattern0400(data,count,debug=False): #捨て子底
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 3].isCross()         and isAsce(data[count + 3],data[count + 4]) and \
-        existsWindow(data[count + 3],data[count + 4]) and \
-        isAsce(data[count + 4],data[count + 5]):
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()            and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()            and \
+        data[count + 2].isBigNegative()   and data[count + 3].isDesc()   and data[count + 3].hasWindow()           and \
+        data[count + 3].isCross()         and data[count + 4].isAsce()   and data[count + 4].hasWindow()           and \
+        data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].dontCare()            and \
+        data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(4)
+        data[count + 5].set6RowsStatus(0)
         if debug:
             print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
 
 def pattern0500(data,count,debug=False): #大陰線のはらみ寄せ
-    avg = (data[count + 2].getOpen()+data[count +2].getClose())/2
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isCross()         and isAsce(data[count + 3],data[count + 4]) and \
-        avg * 0.9 < data[count + 3].getOpen() < avg *1.1 and \
-        isAsce(data[count + 4],data[count + 5]):
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
+        data[count + 2].isBigNegative()   and data[count + 3].dontCare() and data[count + 3].isIncludedFromPrev()   and \
+        data[count + 3].isCross()         and data[count + 4].isAsce()   and data[count + 4].isIncludePrev()        and \
+        data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(5)
+        data[count + 5].set6RowsStatus(0)
         if debug:
             print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
 
 def pattern0600(data,count,debug=False): #たくり線
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isBigNegative()   and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isNegative()      and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 3].getLow() < data[count + 3].getClose() and \
-        isAsce(data[count + 4],data[count + 5]):
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
+        data[count + 2].isBigNegative()   and data[count + 3].isDesc()   and data[count + 3].hasWindow()            and \
+        data[count + 3].isNegative()      and data[count + 4].isAsce()   and data[count + 4].getCandleState() == 19 and \
+        data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(6)
+        data[count + 5].set6RowsStatus(0)
         if debug:
             print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
 
 def pattern0700(data,count,debug=False): #勢力線
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 3].getLow() < data[count + 3].getOpen() and \
-        isAsce(data[count + 4],data[count + 5]):
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].hasWindow()            and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].getCandleState() == 9  and \
+        data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(7)
+        data[count + 5].set6RowsStatus(0)
         if debug:
             print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
 
 def pattern0800(data,count,debug=False): #陰の陰はらみ
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isBigNegative()   and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isSmallNegative() and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 2].getClose() < data[count + 3].getClose() and \
-        data[count + 2].getOpen() > data[count + 3].getOpen() and \
-        isAsce(data[count + 4],data[count + 5]):
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
+        data[count + 2].isBigNegative()   and data[count + 3].isDesc()   and data[count + 3].includedFromPrev()     and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].dontCare()             and \
+        data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(8)
+        data[count + 5].set6RowsStatus(0)
         if debug:
             print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
 
 def pattern0900(data,count,debug=False): #放れ五手黒一本底
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        existsWindow(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and \
-        data[count + 4].isNegative()      and isAsce(data[count + 4],data[count + 5]):
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].dontCare()             and \
+        data[count + 3].isPositive()      and data[count + 4].isAsce()   and data[count + 4].dontCare()             and \
+        data[count + 4].isNegative()      and data[count + 5].isAsce()   and data[count + 5].hasWindow()            and \
+        data[count + 5].bigNegative()     and data[count + 6].isAsce()   and data[count + 6].dontCare()             and \
+        data[count + 6].dontCare()        :
 
-        data[count + 6].set7RowsStatus(9)
+        data[count + 6].set7RowsStatus(0)
         if debug:
             print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
 
 def pattern1000(data,count,debug=False): #やぐら底
-    if  data[count + 0].isBigNegative()   and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and \
-        data[count + 3].isPositive()      and \
-        data[count + 4].isNegative()      and \
-        data[count + 5].isBigPositive()   and isAsce(data[count + 5],data[count + 6]):
+    if  data[count + 0].isBigNegative()   and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
+        data[count + 1].dontCare()        and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
+        data[count + 2].dontCare()        and data[count + 3].dontCare() and data[count + 3].dontCare()             and \
+        data[count + 3].dontCare()        and data[count + 4].dontCare() and data[count + 4].dontCare()             and \
+        data[count + 4].dontCare()        and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 5].isBigPositive()   and data[count + 6].isAsce()   and data[count + 6].dontCare()             and \
+        data[count + 6].dontCare()        :
 
-        data[count + 6].set7RowsStatus(10)
+        data[count + 6].set7RowsStatus(0)
         if debug:
             print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
 
 def pattern1100(data,count,debug=False): #小幅上放れ黒線
-    if  data[count + 0].isNegative()      and isFlat(data[count + 0],data[count + 1]) and \
-        data[count + 1].isPositive()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isFlat(data[count + 3],data[count + 4]) and \
-        data[count + 4].isNegative()      and isAsce(data[count + 4],data[count + 5]) and \
-        data[count + 5].isNegative()      and isAsce(data[count + 5],data[count + 6]):
+    if  data[count + 0].isNegative()   and data[count + 1].dontCare() and data[count + 1].dontCare()             and \
+        data[count + 1].isPositive()   and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
+        data[count + 2].isNegative()   and data[count + 3].dontCare() and data[count + 3].dontCare()             and \
+        data[count + 3].isPositive()   and data[count + 4].dontCare() and data[count + 4].dontCare()             and \
+        data[count + 4].isNegative()   and data[count + 5].isAsce()   and data[count + 5].hasWindow()            and \
+        data[count + 5].isNegative()   and data[count + 6].isAsce()   and data[count + 6].dontCare()             and \
+        data[count + 6].dontCare()        :
 
-        data[count + 6].set7RowsStatus(11)
+        data[count + 6].set7RowsStatus(0)
         if debug:
             print(data[count + 6].get7RowsStatus().getAnzlyzedDataString())
 
 def pattern1200(data,count,debug=False): #放れ七手の変化底
-    if  data[count + 0].isBigNegative()   and isDesc(data[count + 0],data[count + 1]) and \
-        existsWindow(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isFlat(data[count + 3],data[count + 4]) and \
-        data[count + 4].isNegative()      and isAsce(data[count + 4],data[count + 5]) and \
-        data[count + 5].isPositive():
+    if  data[count + 0].isNegative()   and data[count + 1].isDesc()   and data[count + 1].hasWindow()             and \
+        data[count + 1].isSmall()      and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
+        data[count + 2].isSmall()      and data[count + 3].dontCare() and data[count + 3].dontCare()             and \
+        data[count + 3].isSmall()      and data[count + 4].dontCare() and data[count + 4].dontCare()             and \
+        data[count + 4].isSmall()      and data[count + 5].isAsce()   and data[count + 5].hasWindow()            and \
+        data[count + 5].isPositive()   :
 
-        data[count + 5].set6RowsStatus(12)
+        data[count + 5].set6RowsStatus(0)
         if debug:
             print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
 
 def pattern1300(data,count,debug=False): #連続下げ放れ三つ星
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        existsWindow(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isPositive()      and isFlat(data[count + 3],data[count + 4]) and \
-        data[count + 4].isCross()         and isAsce(data[count + 4],data[count + 5]) and \
-        data[count + 5].isBigPositive():
+    if  data[count + 0].isNegative()   and data[count + 1].isDesc()   and data[count + 1].hasWindow()            and \
+        data[count + 1].isSmall()      and data[count + 2].dontCare() and data[count + 2].dontCare()             and \
+        data[count + 2].isSmall()      and data[count + 3].dontCare() and data[count + 3].dontCare()             and \
+        data[count + 3].isSmall()      and data[count + 4].dontCare() and data[count + 4].dontCare()             and \
+        data[count + 4].isCross()      and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 5].isPositive()   :
 
-        data[count + 5].set6RowsStatus(13)
+        data[count + 5].set6RowsStatus(0)
         if debug:
             print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
 
 def pattern1400(data,count,debug=False): #逆襲線
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        existsWindow(data[count + 2],data[count + 3]) and \
-        data[count + 2].isBigPositive()   and isAsce(data[count + 3],data[count + 4]) and \
-        isAsce(data[count + 4],data[count + 5]):
+    if  data[count + 0].isNegative()    and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
+        data[count + 1].isNegative()    and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
+        data[count + 2].isNegative()    and data[count + 3].isDesc()   and data[count + 3].hasWindow()            and \
+        data[count + 3].isBigPositive() and data[count + 4].isAsce()   and data[count + 4].dontCare()             and \
+        data[count + 4].dontCare()      and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()      :
 
-        data[count + 5].set6RowsStatus(14)
+        data[count + 5].set6RowsStatus(0)
         if debug:
             print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
 
 def pattern1500(data,count,debug=False): #抱き陽線
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isNegative()      and isDesc(data[count + 2],data[count + 3]) and \
-        data[count + 3].isNegative()      and isDesc(data[count + 3],data[count + 4]) and \
-        data[count + 4].isBigPositive()   and isAsce(data[count + 4],data[count + 5]):
+    if  data[count + 0].isNegative()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
+        data[count + 1].isNegative()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
+        data[count + 2].isNegative()      and data[count + 3].isDesc()   and data[count + 3].dontCare()             and \
+        data[count + 3].isSmallNegative() and data[count + 4].dontCare() and data[count + 4].includePrev()          and \
+        data[count + 4].isBigPositive()   and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(16)
+        data[count + 5].set6RowsStatus(0)
         if debug:
             print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
 
 def pattern1600(data,count,debug=False): #寄り切り陽線
-    if  data[count + 0].isNegative()      and isDesc(data[count + 0],data[count + 1]) and \
-        data[count + 1].isNegative()      and isDesc(data[count + 1],data[count + 2]) and \
-        data[count + 2].isPositive()      and data[count + 2].getClose() == data[count + 3].getOpen() and \
-        data[count + 3].isNegative()      and isAsce(data[count + 3],data[count + 4]) and \
-        data[count + 4].isBigPositive()   and isAsce(data[count + 4],data[count + 5]):
+    if  data[count + 0].dontCare()      and data[count + 1].isDesc()   and data[count + 1].dontCare()             and \
+        data[count + 1].dontCare()      and data[count + 2].isDesc()   and data[count + 2].dontCare()             and \
+        data[count + 2].dontCare()      and data[count + 3].isDesc()   and data[count + 3].dontCare()             and \
+        data[count + 3].dontCare()      and data[count + 4].dontCare() and (data[count + 4].getCandleState() == 2 or data[count + 4].getCandleState() == 4)            and \
+        data[count + 4].isPositive()    and data[count + 5].isAsce()   and data[count + 5].dontCare()             and \
+        data[count + 5].dontCare()        :
 
-        data[count + 5].set6RowsStatus(16)
+        data[count + 5].set6RowsStatus(0)
         if debug:
             print(data[count + 5].get6RowsStatus().getAnzlyzedDataString())
 

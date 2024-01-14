@@ -23,8 +23,8 @@ def loadAndCalc(code,fromDate,toDate,headers,count,queue,debug):
         current = datasheet[counter]
         if previous != None:
             current.setFactor(previous)
-            if debug:
-                current.printFactors()
+#            if debug:
+#                current.printFactors()
         if counter + 8 >= length:
             continue
         CommonPackage.pattern3200(datasheet,counter,debug)
@@ -88,7 +88,7 @@ def loadAndCalc(code,fromDate,toDate,headers,count,queue,debug):
     queue.put((code,datasheet))
 
 if __name__ == '__main__':
-    numOfThreads = 20
+    numOfThreads = 1
 
     home = os.environ.get('HOME')
     refreshToken, idToken = CommonPackage.getTokens()
@@ -107,7 +107,7 @@ if __name__ == '__main__':
     headers = {'Authorization': f'Bearer {idToken}'}
     datasheets = list()
     length = len(information)
-    length = 111
+    length = 10
     for iter in range(math.ceil(length/numOfThreads)):
         process = list()
         queue = list()
@@ -115,7 +115,7 @@ if __name__ == '__main__':
         for thread in range(nextIter):
             queue.append(Queue())
         for thread in range(nextIter):
-            process.append(Process(target=loadAndCalc,args=(information[iter*numOfThreads+thread]['Code'],fromDate,toDate,headers,iter*numOfThreads+thread,queue[thread],False)))
+            process.append(Process(target=loadAndCalc,args=(information[iter*numOfThreads+thread]['Code'],fromDate,toDate,headers,iter*numOfThreads+thread,queue[thread],True)))
         for thread in range(nextIter):
             process[thread].start()
         for q in queue:
@@ -156,19 +156,8 @@ if __name__ == '__main__':
         worksheet['AC1'] = "Result7Days"
         worksheet['AD1'] = "Result8Days"
 
-        previous = None
         for count, data in enumerate(sheets,start=2):
             data.write(worksheet,count)
-            if previous != None:
-                if CommonPackage.isDesc(previous,data):
-                    worksheet[f'T{count}'] = "Desc"
-                elif CommonPackage.isAsce(previous,data):
-                    worksheet[f'T{count}'] = "Asce"
-                else:
-                    worksheet[f'T{count}'] = "Flat"
-                if CommonPackage.existsWindow(previous,data):
-                    worksheet[f'U{count}'] = "Window"
-            previous = data
 
     workbook.save(xlsxPath)
     workbook.close()
