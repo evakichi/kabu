@@ -5,6 +5,7 @@ import openpyxl
 import math
 from multiprocessing import Process,Queue
 import Data
+import Calender
 
 def loadAndCalc(code,fromDate,toDate,headers,count,queue,debug):
     print(f'{count}:{code}')
@@ -114,8 +115,11 @@ if __name__ == '__main__':
 
     information = CommonPackage.getBrandInfo(idToken)
     headers = {'Authorization': f'Bearer {idToken}'}
+
+    cal = Calender.Calender(fromDate,toDate,headers)
+
     datasheets = list()
-    length = len(information)
+    length = 1#len(information)
     for iter in range(math.ceil(length/numOfThreads)):
         process = list()
         queue = list()
