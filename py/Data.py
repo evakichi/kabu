@@ -1,5 +1,55 @@
 import sys
+class CellString:
+    cellData = [("A" ,"Date"),
+                ("B" ,"Open"),
+                ("C" ,"High"),
+                ("D" ,"Low"),
+                ("E" ,"Close"),
+                ("F" ,"UpperLimit"),
+                ("G" ,"LowerLimit"),
+                ("H" ,"Volume"),
+                ("I" ,"TurnoverValue"),
+                ("J" ,"AdjustmentFactor"),
+                ("K" ,"AdjustmentOpen"),
+                ("L" ,"AdjustmentHigh"),
+                ("M" ,"AdjustmentLow"),
+                ("N" ,"AdjustmentClose"),
+                ("O" ,"AdjustmentVolume"),
+                ("P" ,"CandleState"),
+                ("Q" ,"Factor"),
+                ("R" ,"min"),
+                ("S" ,"max"),
+                ("T" ,"Desc or Asce"),
+                ("U" ,"exists Window"),
+                ("V" ,"Reserved(0)"),
+                ("W" ,"Reserved(1)"),
+                ("X" ,"Reserved(2)"),
+                ("Y" ,"Reserved(3)"),
+                ("Z" ,"Reserved(4)"),
+                ("AA","CandleState(00)"),
+                ("AB","CandleState(01)"),                
+                ("AC","CandleState(02)"),
+                ("AD","CandleState(03)"),                
+                ("AE","CandleState(04)"),
+                ("AF","CandleState(05)"),                
+                ("AG","CandleState(06)"),
+                ("AH","CandleState(07)"),                
+                ("AI","CandleState(08)"),
+                ("AJ","CandleState(09)"),                
+                ("AK","CandleState(10)"),
+                ("AL","CandleState(11)"),                
+                ("AM","CandleState(12)"),
+                ("AN","CandleState(13)"),                
+                ("AO","CandleState(14)"),
+                ("AP","CandleState(15)")
+                ]
+    
+    def __init__(self) -> None:
+        pass
 
+    def getCellData(self,):
+        return self.cellData
+        
 class CandleState:
     status = ["陽の基本形",           #0
               "大陽の基本形",         #1
@@ -115,7 +165,7 @@ class AnalyzedData:
               "予約03",               #68
               "予約04"               #69
               ]
-    
+
     state = None
 
     def __init__(self) -> None:
@@ -128,12 +178,15 @@ class AnalyzedData:
     def getAnzlyzedData(self):
         return self.state
     
-    def getAnalyzedDataString(self):
+    def getAnalyzedDataStrings(self):
         msg = ""
         for s in self.state:
             msg += self.status[s]+","
         return msg
-    
+
+    def getAnalyzedDataString(self,num):
+        return self.status[num]
+        
 class Data:
     date             = ""
     open             = 0.0
@@ -191,6 +244,8 @@ class Data:
     def __init__(self,data,windoFactor,beardFactor) -> None:
         self.candleState   = CandleState()
         self.analysisData  = AnalyzedData()
+        self.cellString = CellString()
+
         self.desc = False
         self.asce = False
         self.flat = False
@@ -362,7 +417,10 @@ class Data:
         worksheet[f'Q{count}']  = self.getFactor()
         worksheet[f'R{count}']  = self.minValue
         worksheet[f'S{count}']  = self.maxValue
-        worksheet[f'T{count}']  = self.getAnalysisData().getAnalyzedDataString()
+        analysysData = self.getAnalysisData().getAnzlyzedData()
+        for i in range(len(analysysData)):
+            c,s = self.cellString.getCellData()[i+26]
+            worksheet[f'{c}{count}']=self.getAnalysisData().getAnalyzedDataString(i)
 
     def setFactor(self,prev):
         if prev.max() > self.max() and prev.min() < self.min():
@@ -487,3 +545,6 @@ class Data:
     
     def getAnalysisData(self):
         return self.analysisData
+    
+    def getCellString(self):
+        return self.cellString

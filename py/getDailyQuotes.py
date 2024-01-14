@@ -115,7 +115,7 @@ if __name__ == '__main__':
     information = CommonPackage.getBrandInfo(idToken)
     headers = {'Authorization': f'Bearer {idToken}'}
     datasheets = list()
-    length = 1 # len(information)
+    length = len(information)
     for iter in range(math.ceil(length/numOfThreads)):
         process = list()
         queue = list()
@@ -123,7 +123,7 @@ if __name__ == '__main__':
         for thread in range(nextIter):
             queue.append(Queue())
         for thread in range(nextIter):
-            process.append(Process(target=loadAndCalc,args=(information[iter*numOfThreads+thread]['Code'],fromDate,toDate,headers,iter*numOfThreads+thread,queue[thread],True)))
+            process.append(Process(target=loadAndCalc,args=(information[iter*numOfThreads+thread]['Code'],fromDate,toDate,headers,iter*numOfThreads+thread,queue[thread],False)))
         for thread in range(nextIter):
             process[thread].start()
         for q in queue:
@@ -133,39 +133,12 @@ if __name__ == '__main__':
     for data in datasheets:
         code,sheets = data
         worksheet = workbook.create_sheet(title=code)
-        worksheet['A1']  = "Date"
-        worksheet['B1']  = "Open"
-        worksheet['C1']  = "High"
-        worksheet['D1']  = "Low"
-        worksheet['E1']  = "Close"
-        worksheet['F1']  = "UpperLimit"
-        worksheet['G1']  = "LowerLimit"
-        worksheet['H1']  = "Volume"
-        worksheet['I1']  = "TurnoverValue"
-        worksheet['J1']  = "AdjustmentFactor"
-        worksheet['K1']  = "AdjustmentOpen"
-        worksheet['L1']  = "AdjustmentHigh"
-        worksheet['M1']  = "AdjustmentLow"
-        worksheet['N1']  = "AdjustmentClose"
-        worksheet['O1']  = "AdjustmentVolume"
-        worksheet['P1']  = "CandleState"
-        worksheet['Q1']  = "Factor"
-        worksheet['R1']  = "min"
-        worksheet['S1']  = "max"
-        worksheet['T1']  = "Desc or Asce"
-        worksheet['U1']  = "exists Window"
-        worksheet['V1']  = "ResultRatio"
-        worksheet['W1']  = "ResultRatio"
-        worksheet['X1']  = "ResultRatio"
-        worksheet['Y1']  = "ResultRatio"
-        worksheet['Z1']  = "ResultRatio"
-        worksheet['AA1'] = "Result5Days"
-        worksheet['AB1'] = "Result6Days"
-        worksheet['AC1'] = "Result7Days"
-        worksheet['AD1'] = "Result8Days"
-
-        for count, data in enumerate(sheets,start=2):
-            data.write(worksheet,count)
+        for count, d in enumerate(sheets,start=2):
+            if count == 2:
+                cellData = d.getCellString().getCellData()
+                for a,c in enumerate(cellData):
+                    worksheet[f'{c[0]}1'] = c[1]
+            d.write(worksheet,count)
 
     workbook.save(xlsxPath)
     workbook.close()
