@@ -123,7 +123,7 @@ if __name__ == '__main__':
         for thread in range(nextIter):
             queue.append(Queue())
         for thread in range(nextIter):
-            process.append(Process(target=loadAndCalc,args=(information[iter*numOfThreads+thread]['Code'],fromDate,toDate,headers,iter*numOfThreads+thread,queue[thread],False)))
+            process.append(Process(target=loadAndCalc,args=(information[iter*numOfThreads+thread]['Code'],fromDate,toDate,headers,iter*numOfThreads+thread,queue[thread],True)))
         for thread in range(nextIter):
             process[thread].start()
         for q in queue:
