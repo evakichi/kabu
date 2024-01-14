@@ -417,10 +417,10 @@ class Data:
         worksheet[f'Q{count}']  = self.getFactor()
         worksheet[f'R{count}']  = self.minValue
         worksheet[f'S{count}']  = self.maxValue
-        analysysData = self.getAnalysisData().getAnzlyzedData()
-        for i in range(len(analysysData)):
+        analysisData = self.analysisData.getAnzlyzedData()
+        for i,a in enumerate(analysisData):
             c,s = self.cellString.getCellData()[i+26]
-            worksheet[f'{c}{count}']=self.getAnalysisData().getAnalyzedDataString(i)
+            worksheet[f'{c}{count}']=self.analysisData.getAnalyzedDataString(a)
 
     def setFactor(self,prev):
         if prev.max() > self.max() and prev.min() < self.min():
