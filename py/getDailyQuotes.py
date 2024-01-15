@@ -115,14 +115,13 @@ if __name__ == '__main__':
     workbook.remove(worksheet)
     print(xlsxPath)
 
-    information = CommonPackage.getBrandInfo(idToken)
-    brandData = [Data.BrandData(info) for info in information]
+    brandData = [Data.BrandData(info) for info in CommonPackage.getBrandInfo(idToken)]
     headers = {'Authorization': f'Bearer {idToken}'}
 
     cal = Calender.Calender(fromDate,toDate,headers)
 
     datasheets = list()
-    length = 1#len(information)
+    length = len(brandData)
     for iter in range(math.ceil(length/numOfThreads)):
         process = list()
         queue = list()

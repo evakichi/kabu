@@ -168,24 +168,16 @@ class AnalyzedData:
 
     state = None
 
-    def __init__(self) -> None:
-        self.state = list()
+    def __init__(self,state) -> None:
+        self.state = state
         pass    
     
-    def appendStatus(self,state):
-        self.state.append(state)
-
     def getAnzlyzedData(self):
         return self.state
     
-    def getAnalyzedDataStrings(self):
-        msg = ""
-        for s in self.state:
-            msg += self.status[s]+","
-        return msg
-
-    def getAnalyzedDataString(self,num):
-        return self.status[num]
+    def getAnalyzedDataString(self):
+        if self.state !=-1:
+            return self.status[self.state]
     
 class BrandData:
 
@@ -304,7 +296,7 @@ class Data:
 
     def __init__(self,data,windoFactor,beardFactor) -> None:
         self.candleState   = CandleState()
-        self.analysisData  = AnalyzedData()
+        self.analysisDataList = list()
         self.cellString = CellString()
 
         self.desc = False
@@ -478,10 +470,9 @@ class Data:
         worksheet[f'Q{count}']  = self.getFactor()
         worksheet[f'R{count}']  = self.minValue
         worksheet[f'S{count}']  = self.maxValue
-        analysisData = self.analysisData.getAnzlyzedData()
-        for i,a in enumerate(analysisData):
+        for i,a in enumerate(self.analysisDataList):
             c,s = self.cellString.getCellData()[i+26]
-            worksheet[f'{c}{count}']=self.analysisData.getAnalyzedDataString(a)
+            worksheet[f'{c}{count}']=a.getAnalyzedDataString()
 
     def setFactor(self,prev):
         if prev.max() > self.max() and prev.min() < self.min():
@@ -609,3 +600,6 @@ class Data:
     
     def getCellString(self):
         return self.cellString
+    
+    def appendAnalysisData(self,state):
+        self.analysisDataList.append(AnalyzedData(state))
