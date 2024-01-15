@@ -7,10 +7,12 @@ from multiprocessing import Process,Queue
 import Data
 import Calender
 
-def loadAndCalc(code,fromDate,toDate,headers,count,queue,debug):
-    print(f'{count}:{code}')
+def loadAndCalc(brandData,fromDate,toDate,headers,count,queue,debug):
+    print(f'{count}:{brandData.getDate()}:{brandData.getCode()}:{brandData.getCompanyName()}({brandData.getCompanyNameEnglish()}):',end="")
+    print(f'{brandData.getSector17CodeName()}({brandData.getSector17Code()}):{brandData.getSector33CodeName()}({brandData.getSector33Code()}):',end="")
+    print(f'{brandData.getScaleCategory()}:{brandData.getMarketCodeName()}({brandData.getMarketCode()}):')
     
-    daily_quotes_get = requests.get(f"https://api.jquants.com/v1/prices/daily_quotes?code={code}&from={fromDate}&to={toDate}", headers=headers)
+    daily_quotes_get = requests.get(f"https://api.jquants.com/v1/prices/daily_quotes?code={brandData.getCode()}&from={fromDate}&to={toDate}", headers=headers)
     daily_quotes_json = daily_quotes_get.json()
 
     datasheet = list()
@@ -95,7 +97,7 @@ def loadAndCalc(code,fromDate,toDate,headers,count,queue,debug):
         CommonPackage.pattern053300(datasheet,counter,debug)#三手放れ寄せ線
         CommonPackage.pattern054500(datasheet,counter,debug)#差し込み線
         CommonPackage.pattern054900(datasheet,counter,debug)#下落途上の連続タスキ
-    queue.put((code,datasheet))
+    queue.put((brandData,datasheet))
 
 if __name__ == '__main__':
     numOfThreads = 20
@@ -114,6 +116,7 @@ if __name__ == '__main__':
     print(xlsxPath)
 
     information = CommonPackage.getBrandInfo(idToken)
+    brandData = [Data.BrandData(info) for info in information]
     headers = {'Authorization': f'Bearer {idToken}'}
 
     cal = Calender.Calender(fromDate,toDate,headers)
@@ -127,7 +130,7 @@ if __name__ == '__main__':
         for thread in range(nextIter):
             queue.append(Queue())
         for thread in range(nextIter):
-            process.append(Process(target=loadAndCalc,args=(information[iter*numOfThreads+thread]['Code'],fromDate,toDate,headers,iter*numOfThreads+thread,queue[thread],False)))
+            process.append(Process(target=loadAndCalc,args=(brandData[iter*numOfThreads+thread],fromDate,toDate,headers,iter*numOfThreads+thread,queue[thread],False)))
         for thread in range(nextIter):
             process[thread].start()
         for q in queue:
@@ -135,13 +138,24 @@ if __name__ == '__main__':
         for thread in range(nextIter):
             process[thread].join()
     for data in datasheets:
-        code,sheets = data
-        worksheet = workbook.create_sheet(title=code)
-        for count, d in enumerate(sheets,start=2):
-            if count == 2:
+        brandData,sheets = data
+        worksheet = workbook.create_sheet(title=brandData.getCode())
+        for count, d in enumerate(sheets,start=3):
+            if count == 3:
+                worksheet['A1']=brandData.getDate()
+                worksheet['B1']=brandData.getCode()
+                worksheet['C1']=brandData.getCompanyName()
+                worksheet['D1']=brandData.getCompanyNameEnglish()
+                worksheet['E1']=brandData.getSector17Code()
+                worksheet['F1']=brandData.getSector17CodeName()
+                worksheet['G1']=brandData.getSector33Code()
+                worksheet['H1']=brandData.getSector33CodeName()
+                worksheet['I1']=brandData.getScaleCategory()
+                worksheet['J1']=brandData.getMarketCode()
+                worksheet['K1']=brandData.getMarketCodeName()
                 cellData = d.getCellString().getCellData()
                 for a,c in enumerate(cellData):
-                    worksheet[f'{c[0]}1'] = c[1]
+                    worksheet[f'{c[0]}2'] = c[1]
             d.write(worksheet,count)
 
     workbook.save(xlsxPath)

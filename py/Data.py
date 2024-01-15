@@ -186,7 +186,68 @@ class AnalyzedData:
 
     def getAnalyzedDataString(self,num):
         return self.status[num]
-        
+    
+class BrandData:
+
+    Date = ""
+    Code = 0
+    CompanyName =""
+    CompanyNameEnglish = ""
+    Sector17Code = ""
+    Sector17CodeName = ""
+    Sector33Code = ""
+    Sector33CodeName = ""
+    ScaleCategory = ""
+    MarketCode = ""
+    MarketCodeName =""
+
+    def __init__(self,data) -> None:
+        self.Date = data['Date']
+        self.Code = data['Code']
+        self.CompanyName = data['CompanyName']
+        self.CompanyNameEnglish = data['CompanyNameEnglish']
+        self.Sector17Code = data['Sector17Code']
+        self.Sector17CodeName = data['Sector17CodeName']
+        self.Sector33Code = data['Sector33Code']
+        self.Sector33CodeName = data['Sector33CodeName']
+        self.ScaleCategory = data['ScaleCategory']
+        self.MarketCode = data['MarketCode']
+        self.MarketCodeName = data['MarketCodeName']
+        pass
+    
+    def getDate(self):
+        return self.Date
+    
+    def getCode(self):
+        return self.Code
+    
+    def getCompanyName(self):
+        return self.CompanyName
+
+    def getCompanyNameEnglish(self):
+        return self.CompanyNameEnglish
+    
+    def getSector17Code(self):
+        return self.Sector17Code
+    
+    def getSector17CodeName(self):
+        return self.Sector17CodeName
+
+    def getSector33Code(self):
+        return self.Sector33Code
+
+    def getSector33CodeName(self):
+        return self.Sector33CodeName
+
+    def getScaleCategory(self):
+        return self.ScaleCategory
+    
+    def getMarketCode(self):
+        return self.MarketCode
+
+    def getMarketCodeName(self):
+        return self.MarketCodeName
+
 class Data:
     date             = ""
     open             = 0.0
