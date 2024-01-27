@@ -8,7 +8,7 @@ import numpy as np
 
 homeDir = os.environ.get('HOME')
 dataDir=os.path.join(homeDir,'quants_data')
-numOfThreads = 4
+numOfThreads = 1
 
 def getNextInterIter(size,current,numOfThreads):
     if math.ceil(size/numOfThreads) != math.floor(size/numOfThreads) and current == math.floor(size/numOfThreads):

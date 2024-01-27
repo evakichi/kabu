@@ -8,15 +8,19 @@ import os
 import math
 import json
 import requests
+import glob
+import datetime
+import openpyxl
+
 from multiprocessing import Process
 
 refreshToken, idToken = Token.getTokens()
 
-def getDailyJpxData(idToken,brandData,distance=0):
+def dailyCheck(idToken,brandData,distance=0):
 
     headers = {'Authorization': f'Bearer {idToken}'}
     brandCode = brandData.getCode()
-    path = CommonPackage.createDir(os.path.join(CommonPackage.dataDir,brandData.getCode()))
+    currentPath = CommonPackage.createDir(os.path.join(CommonPackage.dataDir,brandData.getCode()))
 
     if distance == -1:
         dailyQuotesGet = requests.get(f"https://api.jquants.com/v1/prices/daily_quotes?code={brandCode}", headers=headers)
@@ -29,9 +33,9 @@ def getDailyJpxData(idToken,brandData,distance=0):
     if 'daily_quotes' in dailyQuotesJson and len(dailyQuotesJson['daily_quotes'])!=0:
         for dailyQuote in dailyQuotesJson['daily_quotes']:
             current = dailyQuote['Date']
-            currentPath = os.path.join(path,current+".json")
-            if not os.path.exists(currentPath):
-                with open(currentPath, 'w') as f:
+            currentFilePath = os.path.join(currentPath,current+".json")
+            if not os.path.exists(currentFilePath):
+                with open(currentFilePath, 'w') as f:
                     json.dump(dailyQuote, f)
 
 if __name__ == '__main__':
@@ -44,8 +48,31 @@ if __name__ == '__main__':
         process = list()
         nextIter = CommonPackage.getNextInterIter(length,iter,CommonPackage.numOfThreads)
         for thread in range(nextIter):
-            process.append(Process(target=getDailyJpxData,args=(idToken,brandData[iter*CommonPackage.numOfThreads+thread],1)))
-        for thread in range(nextIter):
-            process[thread].start()
-        for thread in range(nextIter):
-            process[thread].join()
+            break
+            process.append(Process(target=dailyCheck,args=(idToken,brandData[iter*CommonPackage.numOfThreads+thread],1)))
+        for p in process:
+            p.start()
+        for p in process:
+            p.join()
+
+    xlsxPath = os.path.join(CommonPackage.dataDir,datetime.datetime.today().strftime('%Y-%m-%d')+".xlsx")
+
+    workbook = openpyxl.Workbook()
+    worksheet = workbook.get_sheet_by_name('Sheet')
+    workbook.remove(worksheet)
+    print(xlsxPath)
+
+    for i,bd in enumerate(brandData):
+        if i >= 500:
+            break
+        print(bd.getCode())
+        currentPath = os.path.join(CommonPackage.dataDir,bd.getCode())
+        fileList = sorted(glob.glob(currentPath+'/*.json',recursive=False))
+        worksheet = workbook.create_sheet(title=bd.getCode())
+        for j,fl in enumerate(fileList):
+            with open(fl) as f:
+                JpxData.JpxData(json.load(f)).write(worksheet,j+1)
+
+    workbook.save(xlsxPath)
+    workbook.close()          
+

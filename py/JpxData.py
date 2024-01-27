@@ -1,11 +1,3 @@
-import CommonPackage
-import requests
-import Brand
-import Period
-import TradingCalender
-import os
-import json
-
 class JpxData:
 
     date             = None
@@ -24,40 +16,46 @@ class JpxData:
     adjustmentClose  = 0.0
     adjustmentVolume = 0
 
-    def __init__(self,data) -> None:
-        if data == None:
+    def __init__(self,jsonData) -> None:
+        if jsonData == None:
             return None
         
-        if data['Open'] == None or data['High'] == None or data['Low'] == None or data['Close'] == None:
+        if jsonData['Open'] == None or jsonData['High'] == None or jsonData['Low'] == None or jsonData['Close'] == None:
             self.isNoneValue = True
             return None
-        self.date              = data['Date']
-        self.open              = float(data['Open'])
-        self.high              = float(data['High'])
-        self.low               = float(data['Low'])
-        self.close             = float(data['Close'])
-        self.upperLimit        = int(data['UpperLimit'])
-        self.lowerLimit        = int(data['LowerLimit'])
-        self.volume            = int(data['Volume'])
-        self.turnoverValue     = float(data['TurnoverValue'])
-        self.adjustmentFactor  = float(data['AdjustmentFactor'])
-        self.adjustmentOpen    = float(data['AdjustmentOpen'])
-        self.adjustmentHigh    = float(data['AdjustmentHigh'])
-        self.adjustmentLow     = float(data['AdjustmentLow'])
-        self.adjustmentClose   = float(data['AdjustmentClose'])
-        self.adjustmentVolume  = int(data['AdjustmentVolume'])
+        self.date              = jsonData['Date']
+        self.open              = float(jsonData['Open'])
+        self.high              = float(jsonData['High'])
+        self.low               = float(jsonData['Low'])
+        self.close             = float(jsonData['Close'])
+        self.upperLimit        = int(jsonData['UpperLimit'])
+        self.lowerLimit        = int(jsonData['LowerLimit'])
+        self.volume            = int(jsonData['Volume'])
+        self.turnoverValue     = float(jsonData['TurnoverValue'])
+        self.adjustmentFactor  = float(jsonData['AdjustmentFactor'])
+        self.adjustmentOpen    = float(jsonData['AdjustmentOpen'])
+        self.adjustmentHigh    = float(jsonData['AdjustmentHigh'])
+        self.adjustmentLow     = float(jsonData['AdjustmentLow'])
+        self.adjustmentClose   = float(jsonData['AdjustmentClose'])
+        self.adjustmentVolume  = int(jsonData['AdjustmentVolume'])
 
-    def getDailyJpxData(idToken,brandData,path,distance):
-        headers = {'Authorization': f'Bearer {idToken}'}
-        brandCode = brandData.getCode()
-        current = Period.Period.getDate(distance).strftime('%Y-%m-%d')
+    def print(self):
+        print(f'{self.date}:{self.open}-{self.high}-{self.low}-{self.close}')
 
-        dailyQuotesGet = requests.get(f"https://api.jquants.com/v1/prices/daily_quotes?code={brandCode}&date={current}", headers=headers)
-        dailyQuotesJson = dailyQuotesGet.json()
+    def write(self,worksheet,count):
+        worksheet[f'A{count}']  = self.date
+        worksheet[f'B{count}']  = self.open
+        worksheet[f'C{count}']  = self.high
+        worksheet[f'D{count}']  = self.low
+        worksheet[f'E{count}']  = self.close
+        worksheet[f'F{count}']  = self.upperLimit
+        worksheet[f'G{count}']  = self.lowerLimit
+        worksheet[f'H{count}']  = self.volume
+        worksheet[f'I{count}']  = self.turnoverValue
+        worksheet[f'J{count}']  = self.adjustmentFactor
+        worksheet[f'K{count}']  = self.adjustmentOpen
+        worksheet[f'L{count}']  = self.adjustmentHigh
+        worksheet[f'M{count}']  = self.adjustmentLow
+        worksheet[f'N{count}']  = self.adjustmentClose
+        worksheet[f'O{count}']  = self.adjustmentVolume
 
-        #print(brandCode,tradingCalender.isBusinessDay(current),dailyQuotesJson)
-        if len(dailyQuotesJson['daily_quotes'])!=0:
-         #   print(dailyQuotesJson['daily_quotes'])
-            dailyQuote = dailyQuotesJson['daily_quotes'][0]
-            with open(os.path.join(path,current+".json"), 'w') as f:
-               json.dump(dailyQuote, f)
