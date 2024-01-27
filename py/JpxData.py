@@ -42,7 +42,24 @@ class JpxData:
     def print(self):
         print(f'{self.date}:{self.open}-{self.high}-{self.low}-{self.close}')
 
-    def write(self,worksheet,count):
+    def writeJpxHeader(worksheet,count):
+        worksheet[f'A{count}']  = 'date'
+        worksheet[f'B{count}']  = 'open'
+        worksheet[f'C{count}']  = 'high'
+        worksheet[f'D{count}']  = 'low'
+        worksheet[f'E{count}']  = 'close'
+        worksheet[f'F{count}']  = 'upperLimit'
+        worksheet[f'G{count}']  = 'lowerLimit'
+        worksheet[f'H{count}']  = 'volume'
+        worksheet[f'I{count}']  = 'turnoverValue'
+        worksheet[f'J{count}']  = 'adjustmentFactor'
+        worksheet[f'K{count}']  = 'adjustmentOpen'
+        worksheet[f'L{count}']  = 'adjustmentHigh'
+        worksheet[f'M{count}']  = 'adjustmentLow'
+        worksheet[f'N{count}']  = 'adjustmentClose'
+        worksheet[f'O{count}']  = 'adjustmentVolume'
+
+    def writeJpxData(self,worksheet,count):
         worksheet[f'A{count}']  = self.date
         worksheet[f'B{count}']  = self.open
         worksheet[f'C{count}']  = self.high

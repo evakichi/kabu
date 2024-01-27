@@ -63,15 +63,13 @@ if __name__ == '__main__':
     print(xlsxPath)
 
     for i,bd in enumerate(brandData):
-        if i >= 500:
-            break
-        print(bd.getCode())
         currentPath = os.path.join(CommonPackage.dataDir,bd.getCode())
         fileList = sorted(glob.glob(currentPath+'/*.json',recursive=False))
         worksheet = workbook.create_sheet(title=bd.getCode())
-        for j,fl in enumerate(fileList):
+        JpxData.JpxData.writeJpxHeader(worksheet,1)
+        for j,fl in enumerate(fileList,2):
             with open(fl) as f:
-                JpxData.JpxData(json.load(f)).write(worksheet,j+1)
+                JpxData.JpxData(json.load(f)).writeJpxData(worksheet,j)
 
     workbook.save(xlsxPath)
     workbook.close()          
