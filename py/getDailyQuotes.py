@@ -1,4 +1,5 @@
 import CommonPackage
+import Peroid
 import os
 import requests
 import openpyxl
@@ -104,7 +105,7 @@ if __name__ == '__main__':
 
     home = os.environ.get('HOME')
     refreshToken, idToken = CommonPackage.getTokens()
-    fromDate,toDate = CommonPackage.getDates(730,84)
+    fromDate,toDate = Peroid.getDates(1825,1)
 
     path = CommonPackage.createDir(os.path.join(home,"daily_quotes/"))
     period = f"{fromDate}-{toDate}"
@@ -119,6 +120,7 @@ if __name__ == '__main__':
     headers = {'Authorization': f'Bearer {idToken}'}
 
     cal = Calender.Calender(fromDate,toDate,headers)
+
 
     datasheets = list()
     length = len(brandData)
