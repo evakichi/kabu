@@ -1,12 +1,15 @@
 import CommonPackage
-import Peroid
+import Period
+import Token
+import Brand
+
 import os
 import requests
 import openpyxl
 import math
 from multiprocessing import Process,Queue
 import Data
-import Calender
+import TradingCalender
 
 def loadAndCalc(brandData,fromDate,toDate,headers,count,queue,debug):
     print(f'{count}:{brandData.getDate()}:{brandData.getCode()}:{brandData.getCompanyName()}({brandData.getCompanyNameEnglish()}):',end="")
@@ -103,23 +106,26 @@ def loadAndCalc(brandData,fromDate,toDate,headers,count,queue,debug):
 if __name__ == '__main__':
     numOfThreads = 20
 
-    home = os.environ.get('HOME')
-    refreshToken, idToken = CommonPackage.getTokens()
-    fromDate,toDate = Peroid.getDates(1825,1)
-
-    path = CommonPackage.createDir(os.path.join(home,"daily_quotes/"))
+    homeDir = os.environ.get('HOME')
+    refreshToken, idToken = Token.getTokens()
+    for d in range(Period.fiveYears):
+        fromDate,toDate = Period.getDates(d+1,d+1)
+    path = CommonPackage.createDir(os.path.join(homeDir,CommonPackage.dataDir))
     period = f"{fromDate}-{toDate}"
-    xlsxPath = os.path.join(home,"daily_quotes/",period+".xlsx")
+
+    brandData = [Brand.BrandData(info) for info in Brand.BrandData.getBrandInfo(idToken)]
+    headers = {'Authorization': f'Bearer {idToken}'}
+
+    cal = TradingCalender.Calender(fromDate,toDate,headers)
+
+
+    xlsxPath = os.path.join(homeDir,"daily_quotes/",period+".xlsx")
 
     workbook = openpyxl.Workbook()
     worksheet = workbook.get_sheet_by_name('Sheet')
     workbook.remove(worksheet)
     print(xlsxPath)
 
-    brandData = [Data.BrandData(info) for info in CommonPackage.getBrandInfo(idToken)]
-    headers = {'Authorization': f'Bearer {idToken}'}
-
-    cal = Calender.Calender(fromDate,toDate,headers)
 
 
     datasheets = list()
