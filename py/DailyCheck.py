@@ -45,8 +45,6 @@ def dailyCheck(idToken,brandData,distance=0):
 def readDailyAllJpxData(brandData):
     allDailyJpxDataList = list()
     for i,bd in enumerate(brandData):
-        if i > 3:
-            break
         currentPath = os.path.join(CommonPackage.dataDir,bd.getCode())
         fileList = sorted(glob.glob(currentPath+'/*.json',recursive=False))
         dailyJpxDataList = list()
@@ -111,8 +109,6 @@ def writeDailyXlsx(allDailyJpxDataList):
     print(xlsxPath)
 
     for i,adjdl in enumerate(allDailyJpxDataList):
-        if i>3:
-            break
         worksheet = workbook.create_sheet(title=adjdl.getBrandCode())
         DailyJpxData.DailyJpxData.writeJpxHeader(worksheet,1)
         for j,jdl in enumerate(adjdl.getJpxDataList(),2):
@@ -129,8 +125,6 @@ def writeWeeklyXlsx(allWeeklyJpxDataList):
     print(xlsxPath)
 
     for i,awjdl in enumerate(allWeeklyJpxDataList):
-        if i>3:
-            break
         worksheet = workbook.create_sheet(title=awjdl.getBrandCode())
         WeeklyJpxData.WeeklyJpxData.writeJpxHeader(worksheet,1)
         for j,jdl in enumerate(awjdl.getJpxDataList(),2):
@@ -147,8 +141,6 @@ def writeMonthlyXlsx(allMonthlyJpxDataList):
     print(xlsxPath)
 
     for i,awjdl in enumerate(allMonthlyJpxDataList):
-        if i>3:
-            break
         worksheet = workbook.create_sheet(title=awjdl.getBrandCode())
         MonthlyJpxData.MonthlyJpxData.writeJpxHeader(worksheet,1)
         for j,jdl in enumerate(awjdl.getJpxDataList(),2):
@@ -160,7 +152,8 @@ if __name__ == '__main__':
 
     brandData = [Brand.BrandData(info) for info in Brand.BrandData.getBrandInfo(idToken)]
     tradingCalender = TradingCalender.TradingCalender(idToken)
-
+    print(f'Phase1 Start')
+    start = datetime.datetime.now()
     length = len(brandData)
     for iter in range(math.ceil(length/CommonPackage.numOfThreads)):
         process = list()
@@ -171,16 +164,27 @@ if __name__ == '__main__':
             p.start()
         for p in process:
             p.join()
+    end = datetime.datetime.now()
+    print(f'Phase1 End ElapsedTime = {end-start}')
+    start = datetime.datetime.now()
 
     allDailyJpxDataList = readDailyAllJpxData(brandData)
-
     writeDailyXlsx(allDailyJpxDataList)
 
-    allWeeklyJpxDataList = calcAllWeeklyJpxData(allDailyJpxDataList)
+    end = datetime.datetime.now()
+    print(f'Phase2 End ElapsedTime = {end-start}')
+    start = datetime.datetime.now()
 
+    allWeeklyJpxDataList = calcAllWeeklyJpxData(allDailyJpxDataList)
     writeWeeklyXlsx(allWeeklyJpxDataList)
 
-    allMonthlyJpxDataList = calcAllMonthlyJpxData(allDailyJpxDataList)
+    end = datetime.datetime.now()
+    print(f'Phase3 End ElapsedTime = {end-start}')
+    start = datetime.datetime.now()
 
+    allMonthlyJpxDataList = calcAllMonthlyJpxData(allDailyJpxDataList)
     writeMonthlyXlsx(allMonthlyJpxDataList)
 
+    end = datetime.datetime.now()
+    print(f'Phase4 End ElapsedTime = {end-start}')
+    start = datetime.datetime.now()

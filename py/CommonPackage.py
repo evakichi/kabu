@@ -11,7 +11,7 @@ dataDir=os.path.join(homeDir,'quants_data')
 openCloseBigSmallThreshold = 0.02
 highLowBigSmallThreshold = 0.02
 blankCoefficient = 1.05
-numOfThreads = 1
+numOfThreads = 20
 
 def getYearMonth(date):
     year = int(date[0:4])
