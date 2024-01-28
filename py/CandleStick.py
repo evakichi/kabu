@@ -52,20 +52,16 @@ class CandleStick:
     type = None
 
     def __init__(self,open,high,low,close) -> None:
-        open  = open
-        high  = high
-        low   = low
-        close = close
 
         if open == close:
             self.candleStickType = CandleStickType(3,9,0)
         if open > close:
-            if open > close*CommonPackage.bigSmallThreshold:
+            if CandleStick.calcOpenCloseRatio(open,close) > CommonPackage.openCloseBigSmallThreshold:
                 self.candleStickType = CandleStickType(1,1,0)
             else:
                 self.candleStickType = CandleStickType(1,3,0)
         if open < close:
-            if open*CommonPackage.bigSmallThreshold < close:
+            if CandleStick.calcOpenCloseRatio(open,close) > CommonPackage.openCloseBigSmallThreshold:
                 self.candleStickType = CandleStickType(2,2,0)
             else:
                 self.candleStickType = CandleStickType(2,4,0)
@@ -80,4 +76,5 @@ class CandleStick:
     def getFifteenTypeString(self):
         return self.candleStickType.getFifteenTypeString()
     
-    
+    def calcOpenCloseRatio(open,close):
+        return abs(open-close)/min(open,close)

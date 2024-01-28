@@ -82,3 +82,5 @@ class DailyJpxData(JpxData.JpxData):
             worksheet[f'P{count}']  = self.candleStick.getThreeTypeString()
             worksheet[f'Q{count}']  = self.candleStick.getNineTypeString()
             worksheet[f'R{count}']  = self.candleStick.getFifteenTypeString()
+            worksheet[f'S{count}']  = CandleStick.CandleStick.calcOpenCloseRatio(self.open,self.close)
+        
