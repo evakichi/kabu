@@ -53,18 +53,44 @@ class CandleStick:
 
     def __init__(self,open,high,low,close) -> None:
 
-        if open == close:
+        openCloseRatio = CandleStick.calcOpenCloseRatio(open,close)
+        lowBeardRatio = CandleStick.calcLowBeardRatio(open,high,low,close)
+        highBeardRatio = CandleStick.calcLowBeardRatio(open,high,low,close)
+        
+        if open == close: #寄引同時線
             self.candleStickType = CandleStickType(3,9,0)
-        if open > close:
-            if CandleStick.calcOpenCloseRatio(open,close) > CommonPackage.openCloseBigSmallThreshold:
-                self.candleStickType = CandleStickType(1,1,0)
-            else:
-                self.candleStickType = CandleStickType(1,3,0)
-        if open < close:
-            if CandleStick.calcOpenCloseRatio(open,close) > CommonPackage.openCloseBigSmallThreshold:
+        if open > close: #陰線
+            if  openCloseRatio > CommonPackage.openCloseBigSmallThreshold: #大陰線
+                self.candleStickType = CandleStickType(1,1,0) 
+            else: #小陰線
+                if highBeardRatio > lowBeardRatio: 
+                    if highBeardRatio > CommonPackage.highLowBigSmallThreshold: #上ヒゲ陰線
+                        self.candleStickType = CandleStickType(1,5,0)
+                    else: #小陰線
+                        self.candleStickType = CandleStickType(1,3,0)
+                else:
+                    if highBeardRatio > CommonPackage.highLowBigSmallThreshold: #下ヒゲ陰線
+                        self.candleStickType = CandleStickType(1,7,0)
+                    else: #小陰線
+                        self.candleStickType = CandleStickType(1,3,0)
+        if open < close: #陽線
+            if openCloseRatio > CommonPackage.openCloseBigSmallThreshold: #大陽線
                 self.candleStickType = CandleStickType(2,2,0)
-            else:
-                self.candleStickType = CandleStickType(2,4,0)
+            else: #小陽線
+                if highBeardRatio > lowBeardRatio:
+                    if highBeardRatio > CommonPackage.highLowBigSmallThreshold: #上ヒゲ陽線
+                        self.candleStickType = CandleStickType(2,6,0)
+                    else: #小陰線
+                        self.candleStickType = CandleStickType(2,4,0)
+                else:
+                    if highBeardRatio > CommonPackage.highLowBigSmallThreshold: #下ヒゲ陽線
+                        self.candleStickType = CandleStickType(2,8,0)
+                    else: #小陰線
+                        self.candleStickType = CandleStickType(2,4,0)
+
+        #threeType = ['-','陰線','陽線','寄引同時線']
+        #nineType = ['-','大陰線','大陽線','小陰線','小陽線','上ヒゲ陰線','上ヒゲ陽線','下ヒゲ陰線','下ヒゲ陽線','寄引同時線']
+        #fifteenType = ['-','大陰線','大陽線','小陰線','小陽線','上ヒゲ陰線','上ヒゲ陽線','下ヒゲ陰線','下ヒゲ陽線','寄引同時線']
 
 
     def getThreeTypeString(self):
