@@ -43,15 +43,18 @@ def readDailyAllJpxData(brandData):
 
     allDailyJpxDataList = list()
     for i,bd in enumerate(brandData):
-        if i > 1:
+        if i > 300:
             break
         currentPath = os.path.join(CommonPackage.dataDir,bd.getCode())
         fileList = sorted(glob.glob(currentPath+'/*.json',recursive=False))
         dailyJpxDataList = list()
+        prev = None
         for j,fl in enumerate(fileList,2):
             with open(fl) as f:
-                dailyJpxData = DailyJpxData.DailyJpxData(json.load(f))
-            dailyJpxDataList.append(dailyJpxData)
+                dailyJpxData = DailyJpxData.DailyJpxData(json.load(f),prev)
+            if dailyJpxData.quotes != None:
+                dailyJpxDataList.append(dailyJpxData)
+                prev = dailyJpxData
         allDailyJpxDataList.append(BrandJpxData.BrandJpxData(bd,dailyJpxDataList))
     return allDailyJpxDataList
 
@@ -65,14 +68,12 @@ def writeDailyXlsx(allDailyJpxDataList):
     print(xlsxPath)
 
     for i,adjdl in enumerate(allDailyJpxDataList):
-        if i>1:
+        if i>300:
             break
         worksheet = workbook.create_sheet(title=adjdl.getBrandCode())
         DailyJpxData.DailyJpxData.writeJpxHeader(worksheet,1)
-        noneCount = 0
         for j,jdl in enumerate(adjdl.getJpxDataList(),2):
-             if not jdl.writeJpxData(worksheet,j-noneCount):
-                 noneCount += 1
+            jdl.writeJpxData(worksheet,j)
     workbook.save(xlsxPath)
     workbook.close()          
 

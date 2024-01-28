@@ -10,6 +10,7 @@ homeDir = os.environ.get('HOME')
 dataDir=os.path.join(homeDir,'quants_data')
 openCloseBigSmallThreshold = 0.02
 highLowBigSmallThreshold = 0.02
+blankCoefficient = 1.05
 numOfThreads = 1
 
 def getNextInterIter(size,current,numOfThreads):
