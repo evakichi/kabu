@@ -63,6 +63,8 @@ class DailyJpxData(JpxData.JpxData):
         worksheet[f'R{count}']  = 'fifteenTypeCandleStick'
 
     def writeJpxData(self,worksheet,count):
+        if self.date == None:
+            return False
         worksheet[f'A{count}']  = self.date
         worksheet[f'B{count}']  = self.open
         worksheet[f'C{count}']  = self.high
@@ -81,8 +83,8 @@ class DailyJpxData(JpxData.JpxData):
         if self.candleStick != None:
             worksheet[f'P{count}']  = self.candleStick.getThreeTypeString()
             worksheet[f'Q{count}']  = self.candleStick.getNineTypeString()
-            worksheet[f'R{count}']  = self.candleStick.getFifteenTypeString()
+            worksheet[f'R{count}']  = self.candleStick.getSeventeenTypeString()
             worksheet[f'S{count}']  = CandleStick.CandleStick.calcOpenCloseRatio(self.open,self.close)
             worksheet[f'T{count}']  = CandleStick.CandleStick.calcLowBeardRatio(self.open,self.high,self.low,self.close)
             worksheet[f'U{count}']  = CandleStick.CandleStick.calcHighBeardRatio(self.open,self.high,self.low,self.close)
-        
+        return True        

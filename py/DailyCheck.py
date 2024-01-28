@@ -69,8 +69,10 @@ def writeDailyXlsx(allDailyJpxDataList):
             break
         worksheet = workbook.create_sheet(title=adjdl.getBrandCode())
         DailyJpxData.DailyJpxData.writeJpxHeader(worksheet,1)
+        noneCount = 0
         for j,jdl in enumerate(adjdl.getJpxDataList(),2):
-             jdl.writeJpxData(worksheet,j)
+             if not jdl.writeJpxData(worksheet,j-noneCount):
+                 noneCount += 1
     workbook.save(xlsxPath)
     workbook.close()          
 
