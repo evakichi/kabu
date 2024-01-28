@@ -77,4 +77,10 @@ class CandleStick:
         return self.candleStickType.getFifteenTypeString()
     
     def calcOpenCloseRatio(open,close):
-        return abs(open-close)/min(open,close)
+        return abs(open-close) / min(open,close)
+    
+    def calcLowBeardRatio(open,high,low,close):
+        return (min(open,close) - low) / min(open,close)
+    
+    def calcHighBeardRatio(open,high,low,close):
+        return (high - max(open,close)) / max(open,close)
