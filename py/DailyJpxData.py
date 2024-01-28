@@ -72,18 +72,6 @@ class DailyJpxData():
 
     def print(self):
         print(f'{self.date}:{self.quotes.open}-{self.quotes.high}-{self.quotes.low}-{self.quotes.close}')
-
-    def getQuotes(self):
-        return self.quotes
-    
-    def isNoneValue(self):
-        return self.isNone
-
-    def getCandleStick(self):
-        return self.candleStick
-    
-    def getCombination(self):
-        return self.combination
     
     def writeJpxHeader(worksheet,count):
         worksheet[f'A{count}']  = 'date'
@@ -131,7 +119,7 @@ class DailyJpxData():
             worksheet[f'S{count}']  = CandleStick.CandleStick.calcOpenCloseRatio(self.quotes.open,self.quotes.close)
             worksheet[f'T{count}']  = CandleStick.CandleStick.calcLowBeardRatio(self.quotes.open,self.quotes.high,self.quotes.low,self.quotes.close)
             worksheet[f'U{count}']  = CandleStick.CandleStick.calcHighBeardRatio(self.quotes.open,self.quotes.high,self.quotes.low,self.quotes.close)
-        if self.combination != None and self.combination.getCombinationType() != None:
-            worksheet[f'V{count}']  = self.combination.getCombinationType().getString()
+        if self.combination != None and self.combination.combinationType != None:
+            worksheet[f'V{count}']  = self.combination.combinationType.getString()
 
         return True        

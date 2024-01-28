@@ -13,6 +13,18 @@ highLowBigSmallThreshold = 0.02
 blankCoefficient = 1.05
 numOfThreads = 1
 
+def getYearMonth(date):
+    year = int(date[0:4])
+    month = int(date[5:7])
+    day = int(date[8:10])
+    return f'{year}-{datetime.datetime(year,month,day).strftime("%m")}'
+
+def getYearWeekNumber(date):
+    year = int(date[0:4])
+    month = int(date[5:7])
+    day = int(date[8:10])
+    return f'{year}-{datetime.datetime(year,month,day).strftime("%W")}'
+
 def getNextInterIter(size,current,numOfThreads):
     if math.ceil(size/numOfThreads) != math.floor(size/numOfThreads) and current == math.floor(size/numOfThreads):
         return size % numOfThreads

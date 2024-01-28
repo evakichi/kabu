@@ -3,9 +3,12 @@ import Period
 import Token
 import Brand
 import DailyJpxData
+import WeeklyJpxData
+import MonthlyJpxData
 import TradingCalender
-import BrandJpxData
+import JpxBrandData
 import os
+import sys
 import math
 import json
 import requests
@@ -40,10 +43,9 @@ def dailyCheck(idToken,brandData,distance=0):
                     json.dump(dailyQuote, f)
 
 def readDailyAllJpxData(brandData):
-
     allDailyJpxDataList = list()
     for i,bd in enumerate(brandData):
-        if i > 300:
+        if i > 3:
             break
         currentPath = os.path.join(CommonPackage.dataDir,bd.getCode())
         fileList = sorted(glob.glob(currentPath+'/*.json',recursive=False))
@@ -55,20 +57,61 @@ def readDailyAllJpxData(brandData):
             if dailyJpxData.quotes != None:
                 dailyJpxDataList.append(dailyJpxData)
                 prev = dailyJpxData
-        allDailyJpxDataList.append(BrandJpxData.BrandJpxData(bd,dailyJpxDataList))
+        allDailyJpxDataList.append(JpxBrandData.JpxBrandData(bd,dailyJpxDataList))
     return allDailyJpxDataList
 
+def calcAllWeeklyJpxData(allDailyJpxDataList):
+    allWeeklyJpxDataList = list()
+    for i,adjdl in enumerate(allDailyJpxDataList):
+        currentYearWeek = '-1'
+        weeklyJpxDataList = list()
+        weeklyJpxData = None
+        prev = None
+        for j,jdl in enumerate(adjdl.getJpxDataList()):
+            yearWeek = CommonPackage.getYearWeekNumber(jdl.date)
+            if currentYearWeek == yearWeek:
+                weeklyJpxData.append(jdl)
+            if currentYearWeek != yearWeek:
+                if weeklyJpxData != None:
+                    weeklyJpxData.reCalc(prev)
+                    prev = weeklyJpxData
+                    weeklyJpxDataList.append(weeklyJpxData)
+                weeklyJpxData = MonthlyJpxData.MonthlyJpxData(yearWeek,jdl)
+                currentYearWeek = yearWeek
+        allWeeklyJpxDataList.append(JpxBrandData.JpxBrandData(adjdl.brandData,weeklyJpxDataList))
+    return allWeeklyJpxDataList
+
+def calcAllMonthlyJpxData(allDailyJpxDataList):
+    allMonthlyJpxDataList = list()
+    for i,adjdl in enumerate(allDailyJpxDataList):
+        currentYearMonth = '-1'
+        monthlyJpxDataList = list()
+        monthlyJpxData = None
+        prev = None
+        for j,jdl in enumerate(adjdl.getJpxDataList()):
+            yearMonth = CommonPackage.getYearMonth(jdl.date)
+            if currentYearMonth == yearMonth:
+                monthlyJpxData.append(jdl)
+            if currentYearMonth != yearMonth:
+                if monthlyJpxData != None:
+                    monthlyJpxData.reCalc(prev)
+                    prev = monthlyJpxData
+                    monthlyJpxDataList.append(monthlyJpxData)
+                monthlyJpxData = MonthlyJpxData.MonthlyJpxData(yearMonth,jdl)
+                currentYearMonth = yearMonth
+        allMonthlyJpxDataList.append(JpxBrandData.JpxBrandData(adjdl.brandData,monthlyJpxDataList))
+    return allMonthlyJpxDataList
 
 def writeDailyXlsx(allDailyJpxDataList):
     xlsxPath = os.path.join(CommonPackage.dataDir,datetime.datetime.today().strftime('%Y-%m-%d')+"-daily.xlsx")
 
     workbook = openpyxl.Workbook()
-    worksheet = workbook.get_sheet_by_name('Sheet')
+    worksheet = workbook['Sheet']
     workbook.remove(worksheet)
     print(xlsxPath)
 
     for i,adjdl in enumerate(allDailyJpxDataList):
-        if i>300:
+        if i>3:
             break
         worksheet = workbook.create_sheet(title=adjdl.getBrandCode())
         DailyJpxData.DailyJpxData.writeJpxHeader(worksheet,1)
@@ -77,6 +120,41 @@ def writeDailyXlsx(allDailyJpxDataList):
     workbook.save(xlsxPath)
     workbook.close()          
 
+def writeWeeklyXlsx(allWeeklyJpxDataList):
+    xlsxPath = os.path.join(CommonPackage.dataDir,datetime.datetime.today().strftime('%Y-%m-%d')+"-weekly.xlsx")
+
+    workbook = openpyxl.Workbook()
+    worksheet = workbook['Sheet']
+    workbook.remove(worksheet)
+    print(xlsxPath)
+
+    for i,awjdl in enumerate(allWeeklyJpxDataList):
+        if i>3:
+            break
+        worksheet = workbook.create_sheet(title=awjdl.getBrandCode())
+        WeeklyJpxData.WeeklyJpxData.writeJpxHeader(worksheet,1)
+        for j,jdl in enumerate(awjdl.getJpxDataList(),2):
+            jdl.writeJpxData(worksheet,j)
+    workbook.save(xlsxPath)
+    workbook.close()          
+        
+def writeMonthlyXlsx(allMonthlyJpxDataList):
+    xlsxPath = os.path.join(CommonPackage.dataDir,datetime.datetime.today().strftime('%Y-%m-%d')+"-monthly.xlsx")
+
+    workbook = openpyxl.Workbook()
+    worksheet = workbook['Sheet']
+    workbook.remove(worksheet)
+    print(xlsxPath)
+
+    for i,awjdl in enumerate(allMonthlyJpxDataList):
+        if i>3:
+            break
+        worksheet = workbook.create_sheet(title=awjdl.getBrandCode())
+        MonthlyJpxData.MonthlyJpxData.writeJpxHeader(worksheet,1)
+        for j,jdl in enumerate(awjdl.getJpxDataList(),2):
+            jdl.writeJpxData(worksheet,j)
+    workbook.save(xlsxPath)
+    workbook.close()          
 
 if __name__ == '__main__':
 
@@ -88,13 +166,21 @@ if __name__ == '__main__':
         process = list()
         nextIter = CommonPackage.getNextInterIter(length,iter,CommonPackage.numOfThreads)
         for thread in range(nextIter):
-            break
             process.append(Process(target=dailyCheck,args=(idToken,brandData[iter*CommonPackage.numOfThreads+thread],1)))
         for p in process:
             p.start()
         for p in process:
             p.join()
 
-    allDailyJpxData = readDailyAllJpxData(brandData)
+    allDailyJpxDataList = readDailyAllJpxData(brandData)
 
-    writeDailyXlsx(allDailyJpxData)
+    writeDailyXlsx(allDailyJpxDataList)
+
+    allWeeklyJpxDataList = calcAllWeeklyJpxData(allDailyJpxDataList)
+
+    writeWeeklyXlsx(allWeeklyJpxDataList)
+
+    allMonthlyJpxDataList = calcAllMonthlyJpxData(allDailyJpxDataList)
+
+    writeMonthlyXlsx(allMonthlyJpxDataList)
+
