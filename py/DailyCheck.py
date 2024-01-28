@@ -2,8 +2,9 @@ import CommonPackage
 import Period
 import Token
 import Brand
-import JpxData
+import DailyJpxData
 import TradingCalender
+import BrandJpxData
 import os
 import math
 import json
@@ -38,6 +39,42 @@ def dailyCheck(idToken,brandData,distance=0):
                 with open(currentFilePath, 'w') as f:
                     json.dump(dailyQuote, f)
 
+def readDailyAllJpxData(brandData):
+
+    allDailyJpxDataList = list()
+    for i,bd in enumerate(brandData):
+        if i > 1:
+            break
+        currentPath = os.path.join(CommonPackage.dataDir,bd.getCode())
+        fileList = sorted(glob.glob(currentPath+'/*.json',recursive=False))
+        dailyJpxDataList = list()
+        for j,fl in enumerate(fileList,2):
+            with open(fl) as f:
+                dailyJpxData = DailyJpxData.DailyJpxData(json.load(f))
+            dailyJpxDataList.append(dailyJpxData)
+        allDailyJpxDataList.append(BrandJpxData.BrandJpxData(bd,dailyJpxDataList))
+    return allDailyJpxDataList
+
+
+def writeDailyXlsx(allDailyJpxDataList):
+    xlsxPath = os.path.join(CommonPackage.dataDir,datetime.datetime.today().strftime('%Y-%m-%d')+"-daily.xlsx")
+
+    workbook = openpyxl.Workbook()
+    worksheet = workbook.get_sheet_by_name('Sheet')
+    workbook.remove(worksheet)
+    print(xlsxPath)
+
+    for i,adjdl in enumerate(allDailyJpxDataList):
+        if i>1:
+            break
+        worksheet = workbook.create_sheet(title=adjdl.getBrandCode())
+        DailyJpxData.DailyJpxData.writeJpxHeader(worksheet,1)
+        for j,jdl in enumerate(adjdl.getJpxDataList(),2):
+             jdl.writeJpxData(worksheet,j)
+    workbook.save(xlsxPath)
+    workbook.close()          
+
+
 if __name__ == '__main__':
 
     brandData = [Brand.BrandData(info) for info in Brand.BrandData.getBrandInfo(idToken)]
@@ -55,22 +92,6 @@ if __name__ == '__main__':
         for p in process:
             p.join()
 
-    xlsxPath = os.path.join(CommonPackage.dataDir,datetime.datetime.today().strftime('%Y-%m-%d')+".xlsx")
+    allDailyJpxData = readDailyAllJpxData(brandData)
 
-    workbook = openpyxl.Workbook()
-    worksheet = workbook.get_sheet_by_name('Sheet')
-    workbook.remove(worksheet)
-    print(xlsxPath)
-
-    for i,bd in enumerate(brandData):
-        currentPath = os.path.join(CommonPackage.dataDir,bd.getCode())
-        fileList = sorted(glob.glob(currentPath+'/*.json',recursive=False))
-        worksheet = workbook.create_sheet(title=bd.getCode())
-        JpxData.JpxData.writeJpxHeader(worksheet,1)
-        for j,fl in enumerate(fileList,2):
-            with open(fl) as f:
-                JpxData.JpxData(json.load(f)).writeJpxData(worksheet,j)
-
-    workbook.save(xlsxPath)
-    workbook.close()          
-
+    writeDailyXlsx(allDailyJpxData)
